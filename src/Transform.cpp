@@ -1,4 +1,4 @@
-#include "Transform.h"
+﻿#include "Transform.h"
 
 Transform::Transform(vec3 position, vec3 rotation, vec3 scale) {
 	this->position = position;

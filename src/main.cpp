@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,6 +14,7 @@ using namespace std;
 #ifndef ENV_TEST
 
 int main() {
+    cout << "测试中文" << endl;
 	return 0;
 }
 
