@@ -85,6 +85,14 @@ class Gui
 
 ## Game Object
 
+每一个游戏里的对象都有一个独立的`Transform`，`Transform`之间构树形结构
+
+`GetModelMatrix()`获得对象的`model`矩阵
+
+为了减小计算量，修改`Transform`属性之后不会立即计算`modelMatrix`，而是设置`dirty`属性。
+
+当调用`GetModelMatrix()`时，如果`dirty=true`才会计算。
+
 ### Transform
 
 ```cpp
