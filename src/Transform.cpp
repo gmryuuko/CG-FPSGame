@@ -1,7 +1,17 @@
 ﻿#include "Transform.h"
 
+#include <glm/gtx/string_cast.hpp>
+
 using namespace std;
 using namespace glm;
+
+Transform::Transform(const Transform& transform) {
+	this->position = transform.position;
+	this->rotation = transform.rotation;
+	this->scale = transform.scale;
+	SetDirty();
+}
+
 
 Transform::Transform(vec3 position, vec3 rotation, vec3 scale) {
 	this->position = position;
@@ -82,10 +92,30 @@ vec3 Transform::GetScale() const {
 }
 
 void Transform::SetParent(Transform* parent) {
+	if (this->parent != nullptr) {
+		RemoveParent();
+	}
+	if (parent == nullptr) return;
+
 	this->parent = parent;
 	parent->children.emplace_back(this);
 	SetDirty();
 }
+
+void Transform::RemoveParent() {
+	if (parent != nullptr) {
+		for (vector<Transform*>::iterator i = parent->children.begin();
+			i != parent->children.end(); i++) {
+			if (*i == this) {
+				parent->children.erase(i);
+				break;
+			}
+		}
+		parent = nullptr;
+		SetDirty();
+	}
+}
+
 
 vec3 Transform::GetAxisX() {
 	CheckDirty();
@@ -104,12 +134,21 @@ vec3 Transform::GetAxisZ() {
 
 void Transform::Translate(const vec3& direction, float distance) {
 	vec3 move = normalize(direction) * distance;
-	position += distance;
+	// cout << glm::to_string(move) << std::endl;
+	position += move;
 	SetDirty();
 }
 
-void Transform::RotateX(float pitch) {
+void Transform::RotateX(float pitch, bool limit, float lower, float upper) {
 	rotation.x += pitch;
+
+	if (limit) {
+		if (rotation.x > upper)
+			rotation.x = upper;
+		if (rotation.x < lower)
+			rotation.x = lower;
+	}
+
 	SetDirty();
 }
 

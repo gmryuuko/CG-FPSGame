@@ -9,6 +9,10 @@
 
 #include "Graphic.h"
 #include "Transform.h"
+#include "FrameTime.h"
+#include "Resource.h"
+
+// #include "obj_loader.h"
 
 using namespace std;
 
@@ -18,6 +22,7 @@ using namespace std;
 
 
 int main() {
+
     GLFWwindow* window = Graphic::CreateWindow("FPS", 1920, 1080);
     // GLFWwindow* window = Graphic::CreateWindow("FPS", 800, 600);
 
@@ -29,12 +34,37 @@ int main() {
         cout << "window created" << endl;
     }
 
-    Graphic::SetClear(GL_COLOR_BUFFER_BIT);
+    Graphic::SetClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Graphic::SetClearColor(glm::vec4(0.2, 0.2, 0.2, 1));
 
+    Graphic::SetVSync(1); // v sync
+    Graphic::SetCursorMode(GLFW_CURSOR_DISABLED);
+
+    // ----------------------------------------------------------------
+    // scene 1
+    Scene scene;
+    // set a camera
+    scene.mainCamera = new Camera();
+    scene.mainCamera->SetTransform(Transform(glm::vec3(0, 0, 5)));
+    // set a object
+    // auto vertices = new vector<Vertex>;
+    // auto indices = new vector<unsigned int>;
+    // Mesh* mesh = new Mesh(vertices, indices);
+    Mesh* mesh = Resource::GetMesh("../resources/model/cube.obj");
+    scene.gameObjects.emplace_back(new GameObject(mesh));
+    // -----------------------------------------------------------------
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
     while (!Graphic::Closed()) {
-        Graphic::NewFrame();
+        Graphic::SwapFrame();
         Graphic::Clear();
+
+
+        scene.ProcessInput();
+        Graphic::RenderScene(scene);
+
+        // cout << FrameTime::GetDeltaTime() << endl;
     }
 
     glfwTerminate();

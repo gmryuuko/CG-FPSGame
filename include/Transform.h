@@ -9,6 +9,10 @@
 #include <vector>
 #include <iostream>
 
+#include "GameObject.h"
+
+class GameObject;
+
 /*
 	rotation相关部分写的很烂，建议不要用roll角（绕Z轴旋转），两个自由度应该也够了
 	scale建议XYZ均等缩放
@@ -34,12 +38,15 @@ private:
 	// axis
 	glm::vec3 axisX, axisY, axisZ;
 
-	Transform* parent = nullptr;
-	std::vector<Transform*> children;
 
 public:
 
-	Transform(glm::vec3 position = glm::vec3(1), glm::vec3 rotation = glm::vec3(1), glm::vec3 scale = glm::vec3(1));
+	GameObject* gameObject = nullptr;
+	Transform* parent = nullptr;
+	std::vector<Transform*> children;
+
+	Transform(const Transform& transform);
+	Transform(glm::vec3 position = glm::vec3(1), glm::vec3 rotation = glm::vec3(0), glm::vec3 scale = glm::vec3(1));
 	// 设置position
 	void SetPosition(const glm::vec3& position);
 	// 设置rotation
@@ -48,10 +55,11 @@ public:
 	void SetScale(const glm::vec3& scale);
 	// 设置parent节点
 	void SetParent(Transform* parent);
+	void RemoveParent();
 	// 向direction方向移动distance
 	void Translate(const glm::vec3& direction, float distance);
 	// X轴旋转角增加pitch[角度]
-	void RotateX(float pitch);
+	void RotateX(float pitch, bool limit = false, float lower = -89, float upper = 89);
 	// Y轴旋转角增加yaw[角度]
 	void RotateY(float yaw);
 	// Z轴旋转角增加roll[角度]

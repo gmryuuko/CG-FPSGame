@@ -7,18 +7,19 @@
 #include <string>
 
 #include "Texture.h"
+#include "Mesh.h"
 
-using namespace std;
 
-class Resource {
+
+static class Resource {
 private:
-    unordered_map<string, Texture*> textures;
-    unordered_map<string, Mesh*> meshes;
+    // static std::unordered_map<std::string, Texture*> textures;
+    static std::unordered_map<std::string, Mesh*> meshes;
 
 
 public:
-    Texture* GetTexture(const string& path);
-    Mesh* GetMesh(const string& path);
+    static Texture* GetTexture(const std::string& path);
+    static Mesh* GetMesh(const std::string& path);
 
 };
 
