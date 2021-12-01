@@ -2,9 +2,12 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 
+#include "Graphic.h"
 #include "Transform.h"
 
 using namespace std;
@@ -13,8 +16,29 @@ using namespace std;
 
 #ifndef ENV_TEST
 
+
 int main() {
-    cout << "测试中文" << endl;
+    GLFWwindow* window = Graphic::CreateWindow("FPS", 1920, 1080);
+    // GLFWwindow* window = Graphic::CreateWindow("FPS", 800, 600);
+
+    if (window == nullptr) {
+        cout << "Create window failed!" << endl;
+        return 0;
+    }
+    else {
+        cout << "window created" << endl;
+    }
+
+    Graphic::SetClear(GL_COLOR_BUFFER_BIT);
+    Graphic::SetClearColor(glm::vec4(0.2, 0.2, 0.2, 1));
+
+    while (!Graphic::Closed()) {
+        Graphic::NewFrame();
+        Graphic::Clear();
+    }
+
+    glfwTerminate();
+
 	return 0;
 }
 

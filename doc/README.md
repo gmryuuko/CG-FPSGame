@@ -1,4 +1,4 @@
-﻿# Doc
+﻿﻿# Doc
 
 ## Engine
 
@@ -54,12 +54,12 @@ public:
 
 
 
-### GraphicPipeline
+### Graphic
 
 ```cpp
 class Shader {};
 
-class GraphicPipeline
+class Graphic
 {
 public:
     void Render(const Scene& scene);

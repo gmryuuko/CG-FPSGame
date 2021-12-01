@@ -1,3 +1,14 @@
-﻿vs/
-build/
+﻿# executable file
 bin/
+
+# clion
+.idea/
+cmake-build*/
+
+# vscode
+.vscode/
+build/
+
+# visual studio
+.vs/
+out/
