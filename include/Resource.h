@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef RESOURCE_H
 #define RESOURCE_H
@@ -11,7 +11,7 @@
 
 
 
-static class Resource {
+class Resource {
 private:
     // static std::unordered_map<std::string, Texture*> textures;
     static std::unordered_map<std::string, Mesh*> meshes;

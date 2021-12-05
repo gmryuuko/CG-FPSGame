@@ -38,8 +38,8 @@ namespace ObjLoader
 
 
 		
-		bool fail = false; // ½âÎöÊ§°Ü
-		int lineNum = 0; // µ±Ç°ĞĞºÅ
+		bool fail = false; // è§£æå¤±è´¥
+		int lineNum = 0; // å½“å‰è¡Œå·
 		vector<vec3> positions, normals;
 		vector<vec2> texCoords;
 		auto vertices = new vector<Vertex>();
@@ -52,10 +52,10 @@ namespace ObjLoader
 			auto& ws = *words;
 			
 			float x, y, z;
-			if (words->size() == 0 || ws[0][0] == '#') { // ¿ÕĞĞ»ò×¢ÊÍ
+			if (words->size() == 0 || ws[0][0] == '#') { // ç©ºè¡Œæˆ–æ³¨é‡Š
 				continue;
 			}
-			else if (ws[0] == "mtllib") { // ¼ÓÔØ mtl ÎÄ¼ş
+			else if (ws[0] == "mtllib") { // åŠ è½½ mtl æ–‡ä»¶
 				
 			}
 			else if (ws[0] == "o") { // New object
@@ -114,7 +114,7 @@ namespace ObjLoader
 				indices->emplace_back(index + 1);
 				indices->emplace_back(index + 2);
 				
-				if (ws.size() == 5) { // 4¸öµã
+				if (ws.size() == 5) { // 4ä¸ªç‚¹
 					indices->emplace_back(index + 2);
 					indices->emplace_back(index + 3);
 					indices->emplace_back(index);

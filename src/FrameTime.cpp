@@ -1,4 +1,4 @@
-﻿#include "Time.h"
+#include "Time.h"
 #include "..\include\FrameTime.h"
 
 float FrameTime::lastFrameTime = 0;

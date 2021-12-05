@@ -1,4 +1,4 @@
-﻿#include "Camera.h"
+#include "Camera.h"
 #include "FrameTime.h"
 
 #include "glm/gtx/string_cast.hpp"

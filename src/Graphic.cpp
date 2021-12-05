@@ -1,4 +1,4 @@
-﻿#include "Graphic.h"
+#include "Graphic.h"
 #include "Input.h"
 #include "FrameTime.h"
 

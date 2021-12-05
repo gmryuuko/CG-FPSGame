@@ -1,9 +1,9 @@
-﻿cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.20)
 
 project(fps)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-# set(CMAKE_CXX_FLAGS "/std:c++17 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "/utf-8 ${CMAKE_CXX_FLAGS}")
 
 # include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)

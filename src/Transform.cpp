@@ -1,4 +1,4 @@
-﻿#include "Transform.h"
+#include "Transform.h"
 
 #include <glm/gtx/string_cast.hpp>
 

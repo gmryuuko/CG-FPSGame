@@ -1,11 +1,11 @@
-﻿#pragma once
+#pragma once
 
 #ifndef TIME_H
 #define TIME_H
 
 #include <GLFW/glfw3.h>
 
-static class FrameTime {
+class FrameTime {
 private:
 	static float lastFrameTime;
 	static float currentFrameTime;

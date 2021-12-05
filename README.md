@@ -7,7 +7,7 @@ ZJU CG 2021
 
 `lib/glfw3.lib` 是64位版本。
 
-文件编码是 `UTF-8 with BOM`，因为 MSVC 不认没有 BOM 的 utf8 编码，中文容易出问题（别写中文就不用管编码了）。
+MSVC需要添加编译参数`/utf-8`
 
 ## 如何编译
 

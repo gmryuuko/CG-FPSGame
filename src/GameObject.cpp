@@ -1,4 +1,4 @@
-﻿#include "GameObject.h"
+#include "GameObject.h"
 #include "Graphic.h"
 
 GameObject::GameObject(Mesh* mesh) {

@@ -1,4 +1,4 @@
-﻿#include "Resource.h"
+#include "Resource.h"
 #include "obj_loader.h"
 
 using namespace std;

@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -47,9 +47,6 @@ int main() {
     scene.mainCamera = new Camera();
     scene.mainCamera->SetTransform(Transform(glm::vec3(0, 0, 5)));
     // set a object
-    // auto vertices = new vector<Vertex>;
-    // auto indices = new vector<unsigned int>;
-    // Mesh* mesh = new Mesh(vertices, indices);
     Mesh* mesh = Resource::GetMesh("../resources/model/cube.obj");
     scene.gameObjects.emplace_back(new GameObject(mesh));
     // -----------------------------------------------------------------

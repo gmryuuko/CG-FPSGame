@@ -1,4 +1,4 @@
-﻿#include "Input.h"
+#include "Input.h"
 
 #include <iostream>
 #include "FrameTime.h"

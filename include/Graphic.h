@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
@@ -17,7 +17,7 @@
 
 //class GameObject;
 
-static class Graphic {
+class Graphic {
 private:
     static GLFWwindow* window;
     static unsigned int scrWidth, scrHeight;
