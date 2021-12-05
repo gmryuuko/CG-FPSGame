@@ -1,20 +1,19 @@
-#include "Time.h"
 #include "..\include\FrameTime.h"
 
-float FrameTime::lastFrameTime = 0;
-float FrameTime::currentFrameTime = 0;
-float FrameTime::deltaTime = 0;
+#include "Time.h"
 
-void FrameTime::UpdateTime() {
-	lastFrameTime = currentFrameTime;
-	currentFrameTime = (float)glfwGetTime();
-	deltaTime = currentFrameTime - lastFrameTime;
+namespace FrameTime {
+float lastFrameTime = 0;
+float currentFrameTime = 0;
+float deltaTime = 0;
+
+void UpdateTime() {
+    lastFrameTime = currentFrameTime;
+    currentFrameTime = (float)glfwGetTime();
+    deltaTime = currentFrameTime - lastFrameTime;
 }
 
-float FrameTime::GetTime() {
-	return currentFrameTime;
-}
+float GetTime() { return currentFrameTime; }
 
-float FrameTime::GetDeltaTime() {
-	return deltaTime;
-}
+float GetDeltaTime() { return deltaTime; }
+}  // namespace FrameTime

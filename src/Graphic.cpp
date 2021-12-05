@@ -7,19 +7,20 @@
 using std::string;
 using namespace glm;
 
-const string Graphic::UNIFORM_MODEL_MATRIX = "model";
-const string Graphic::UNIFORM_VIEW_MATRIX = "view";
-const string Graphic::UNIFORM_PROJECTION_MATRIX = "projection";
+namespace Graphic {
 
-GLFWwindow* Graphic::window = nullptr;
-unsigned int Graphic::scrWidth = 0;
-unsigned int Graphic::scrHeight = 0;
-unsigned int Graphic::clearBit = 0;
-glm::vec4 Graphic::clearColor = glm::vec4(0, 0, 0, 1);
-Shader* Graphic::mainShader = nullptr;
+void InitShader();
+void FrameBufferSizeCallback(GLFWwindow* window, int scrWidth, int scrHeight);
+
+GLFWwindow* window = nullptr;
+unsigned int scrWidth = 0;
+unsigned int scrHeight = 0;
+unsigned int clearBit = 0;
+glm::vec4 clearColor = glm::vec4(0, 0, 0, 1);
+Shader* mainShader = nullptr;
 
 
-GLFWwindow* Graphic::CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight) {
+GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight) {
     
     Graphic::scrWidth = scrWidth;
     Graphic::scrHeight = scrHeight;
@@ -66,7 +67,7 @@ GLFWwindow* Graphic::CreateWindow(const std::string& title, unsigned int scrWidt
     return window;
 }
 
-void Graphic::FrameBufferSizeCallback(GLFWwindow* window, int scrWidth, int scrHeight) {
+void FrameBufferSizeCallback(GLFWwindow* window, int scrWidth, int scrHeight) {
 
     Graphic::scrWidth = scrWidth;
     Graphic::scrHeight = scrHeight;
@@ -74,37 +75,37 @@ void Graphic::FrameBufferSizeCallback(GLFWwindow* window, int scrWidth, int scrH
     glViewport(0, 0, scrWidth, scrHeight);
 }
 
-void Graphic::SetCursorMode(int value) {
+void SetCursorMode(int value) {
     if (window == nullptr) {
         return ;
     }
     glfwSetInputMode(window, GLFW_CURSOR, value);
 }
 
-int Graphic::Closed() {
+int Closed() {
     if (window == nullptr) {
         return 1;
     }
     return glfwWindowShouldClose(window);
 }
 
-void Graphic::Clear() {
+void Clear() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     glClear(clearBit);
 }
 
 
-void Graphic::SetClear(unsigned int value) {
+void SetClear(unsigned int value) {
     clearBit |= value;
 }
-void Graphic::RemoveClear(unsigned int value) {
+void RemoveClear(unsigned int value) {
     clearBit &= ~value;
 }
-void Graphic::SetClearColor(glm::vec4 color) {
+void SetClearColor(glm::vec4 color) {
     clearColor = color;
 }
 
-void Graphic::SwapFrame() {
+void SwapFrame() {
     FrameTime::UpdateTime();
     
     std::cout << "New Frame" << std::endl;
@@ -127,18 +128,18 @@ void Graphic::SwapFrame() {
     }
 }
 
-void Graphic::SetVSync(unsigned int value) {
+void SetVSync(unsigned int value) {
     glfwSwapInterval(value);
 }
 
-void Graphic::InitShader() {
+void InitShader() {
     mainShader = new Shader("../shader/main.vert", "../shader/main.frag");
 }
 
-void Graphic::RenderScene(Scene& scene) {
+void RenderScene(Scene& scene) {
     if (scene.mainCamera == nullptr) return;
 
-    std::cout << "Graphic::RenderScene" << std::endl;
+    std::cout << "RenderScene" << std::endl;
     // std::cout << scene.mainCamera->zoom << std::endl;
 
     mainShader->Use();
@@ -154,3 +155,5 @@ void Graphic::RenderScene(Scene& scene) {
         // obj->Test();
     }
 }
+
+} // namespace 

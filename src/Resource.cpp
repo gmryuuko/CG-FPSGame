@@ -1,15 +1,19 @@
 #include "Resource.h"
+
 #include "obj_loader.h"
 
 using namespace std;
 
-unordered_map<string, Mesh*> Resource::meshes;
+namespace Resource {
 
-Mesh* Resource::GetMesh(const string& path) {
-	if (meshes.find(path) != meshes.end())
-		return meshes[path];
+unordered_map<string, Mesh*> meshes;
 
-	Mesh* mesh = ObjLoader::Load(path);
-	meshes[path] = mesh;
-	return mesh;
+Mesh* GetMesh(const string& path) {
+    if (meshes.find(path) != meshes.end()) return meshes[path];
+
+    Mesh* mesh = ObjLoader::Load(path);
+    meshes[path] = mesh;
+    return mesh;
 }
+
+}  // namespace Resource

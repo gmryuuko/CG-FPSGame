@@ -12,3 +12,5 @@ build/
 # visual studio
 .vs/
 out/
+
+temp/
