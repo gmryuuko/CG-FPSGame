@@ -1,20 +1,22 @@
 #include "GameObject.h"
 #include "Graphic.h"
 
-GameObject::GameObject(Mesh* mesh) {
-	this->mesh = mesh;
+GameObject::GameObject(Model* model) {
+	this->model = model;
 	this->transform = new Transform();
 	this->transform->gameObject = this;
 }
 
-void GameObject::Draw(const Shader& shader) {
+void GameObject::Draw(const Shader& objShader, const Shader& lightShader) {
+	const Shader& shader = this->isLight ? lightShader : objShader;
+	
 	shader.Use();
 	shader.SetMat4(Graphic::UNIFORM_MODEL_MATRIX, transform->GetModelMatrix());
-	if (mesh != nullptr)
-		mesh->Draw(shader);
+	if (model != nullptr)
+		model->Draw(shader);
 
 	for (auto& tr : transform->children) {
-		tr->gameObject->Draw(shader);
+		tr->gameObject->Draw(objShader, lightShader);
 	}
 }
 

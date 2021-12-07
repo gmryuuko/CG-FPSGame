@@ -1,4 +1,4 @@
-﻿# Doc
+﻿# Document
 
 ## Engine
 
@@ -14,31 +14,26 @@ while (!Graphic::Closed()) {
 }
 ```
 
-
-
 ### FrameTime
 
 ```cpp
-class Time
-{
-public:
-    float deltaTime, time;
+namespace FrameTime {
+float GetTime();
+float GetDeltaTime();
 }
 ```
-
-
 
 ### Input
 
 ```cpp
-class Input
-{
-public:
-    GetKey();
-    GetKeyDown();
-    GetKeyUp();
+namespace Input {
+bool GetKey(int keyCode);
+bool GetKeyUp(int keyCode);
+bool GetKeyDown(int keyCode);
+void GetCursor(double& xpos, double& ypos);
 }
 ```
+
 #### Keyboard
 
 对于键盘按键，可能有三种使用方式
@@ -49,7 +44,7 @@ public:
 
 但是`glfwGetKey()`这个函数只返回是否按下，对于按下触发和松开触发需要注册回调函数。
 
-`keyCode`最大值应该是`348`，最小值是`-1(UNKNOWN)`
+`keyCode`最大值应该是`348`（翻glfw头文件找的），最小值是`-1(UNKNOWN)`
 
 `Input::GetKey(keyCode)`返回当前帧里`keyCode`有没有被按下。
 
@@ -59,60 +54,50 @@ public:
 
 #### Mouse
 
-鼠标移动事件不使用回调函数实现，鼠标快速移动的时候一帧里会调用很多次callback，实测对性能影响还不小？掉了好多帧。
+`GetCursor(double& xpos, double& ypos)`
 
+鼠标移动事件不使用回调函数实现，鼠标快速移动的时候一帧里会调用很多次callback，实测对性能影响似乎还不小，掉了好多帧。
 
+鼠标按键暂时还没写，可以集成到`GetKey()`函数里面吧
 
 ### Resource
 
 管理所有资源，避免重复创建。
 
-比如一个Scene里面重复使用了一个Model很多次，只有第一次读取，后来的直接使用。
+比如一个`Scene`里面重复使用了一个`Model`很多次，只有第一次读取，后来的直接使用。
 
 ```cpp
-class Resource
-{
-private:
-    unordered_map<string, Texture*> textures;
-    unordered_map<string, Model*> models;
-    unordered_map<string, Audio*> audio;
+namespace Resource {
+unordered_map<string, Texture*> textures;
+unordered_map<string, Model*> models;
+// unordered_map<string, Audio*> audio;
     
-public:
-    GetTexture(const string& path);
-    GetModel(const string& Model);
+GetTexture(const string& path); // 图片文件路径
+GetModel(const string& Model); // obj 文件路径
 }
+
 ```
-
-
 
 ### Graphic
 
 ```cpp
-class Shader {};
+class Shader;
 
-class Graphic
-{
-public:
-    void Render(const Scene& scene);
+namespace Graphic {
+// 实现在一个render loop里的一次绘制
+void Render(const Scene& scene);
 }
 ```
-
-
 
 ### Gui
 
-用dear imgui？？
+用dear imgui?
 
 ```cpp
-class Gui
-{
+namespace Gui {
     
 }
 ```
-
-
-
-
 
 ## Game Object
 
@@ -126,7 +111,7 @@ class Gui
 
 当调用`GetModelMatrix()`时，如果`dirty=true`才会计算。
 
-**TODO: 现在GameObject下面直接放了一个Mesh，应该还是要改成Model**
+**现在GameObject下面直接放了一个Mesh，应该还是要改成Model**
 
 ### Transform
 
@@ -136,11 +121,15 @@ class Transform
 public:
     Transform();
     vec3 position, scale, rotation;
-    mat4 GetModelMatrix() const;
+    mat4 GetModelMatrix();
+    vec3 GetAxisX();
+    vec3 GetAxisY();
+    vec3 GetAxisZ();
+    vec3 GetPosition();
+    vec3 GetRotation();
+    vec3 GetScale();
 }
 ```
-
-
 
 ### Camera
 
@@ -148,15 +137,22 @@ public:
 class Camera
 {
 public:
+    SetTransform();
     GetViewMatrix();
 }
 ```
 
-
-
 ### Model
 
 ```cpp
+struct Vertex {
+    vec3 position;
+    vec3 normal;
+    vec2 texCoords;
+    vec3 tangent;
+    vec3 bitangent;
+}
+
 class Texture
 {
 public:
@@ -167,7 +163,7 @@ public:
 class Mesh
 {
 public:
-    vector<Vertex
+    vector<Vertex>
 }
 
 class Model
@@ -179,8 +175,6 @@ private:
     
 }
 ```
-
-
 
 ### Light
 
@@ -199,23 +193,15 @@ public:
 }
 ```
 
-
-
 ### GameObject
 
 ```cpp
 class GameObject
 {
     Transform *transform;
-    Camera *camera;
-    Model *model;
-    Light *light;
+    Model* model;
 }
 ```
-
-
-
-
 
 ### Scene
 

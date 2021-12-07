@@ -21,6 +21,9 @@ class Transform {
 
 private:
 	// 根据position, rotation, scale计算的model矩阵
+	glm::mat4 translateMatrix = glm::mat4(1);
+	glm::mat4 rotationMatrix = glm::mat4(1);
+	glm::mat4 scaleMatrix = glm::mat4(1);
 	glm::mat4 modelMatrix = glm::mat4(1);
 	// modelMatrix是否需要重新计算
 	bool dirty = true;
@@ -71,6 +74,10 @@ public:
 	glm::vec3 GetAxisY();
 	glm::vec3 GetAxisZ();
 	glm::mat4 GetModelMatrix();
+	glm::mat4 GetTranslateMatrix();
+	glm::mat4 GetRotationMatrix();
+	glm::mat4 GetScaleMatrix();
+
 };
 
 #endif

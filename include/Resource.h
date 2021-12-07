@@ -6,14 +6,13 @@
 #include <string>
 #include <unordered_map>
 
-#include "Mesh.h"
+#include "Model.h"
 #include "Texture.h"
 
 namespace Resource {
-// std::unordered_map<std::string, Texture*> textures;
 
-Texture* GetTexture(const std::string& path);
-Mesh* GetMesh(const std::string& path);
+    Texture* GetTexture(const std::string& path, const std::string& directory = "../resources/textures");
+    Model* GetModel(const std::string& path, const std::string& directory = "../resources/models");
 
 }  // namespace Resource
 

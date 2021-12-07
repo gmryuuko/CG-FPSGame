@@ -19,9 +19,23 @@
 
 namespace Graphic {
 
+// transform
 const std::string UNIFORM_MODEL_MATRIX = "model";
 const std::string UNIFORM_VIEW_MATRIX = "view";
 const std::string UNIFORM_PROJECTION_MATRIX = "projection";
+
+// material
+const std::string UNIFORM_AMBIENT_COLOR = "colorAmbient";
+const std::string UNIFORM_DIFFUSE_COLOR = "colorDiffuse";
+const std::string UNIFORM_SPECULAR_COLOR = "colorSpecular";
+const std::string UNIFORM_SHININESS = "shininess";
+
+// texture
+const std::string UNIFORM_USE_DIFFUSE_TEX = "useTexDiff";
+const std::string UNIFORM_USE_SPECULAR_TEX = "useTexSpec";
+const std::string UNIFORM_DIFFUSE_TEX = "texDiffuse";
+const std::string UNIFORM_SPECULAR_TEX = "texSpecular";
+
 
 // 创建窗口
 GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight);

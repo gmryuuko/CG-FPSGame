@@ -18,8 +18,17 @@ mat4 Camera::GetViewMatrix() {
 
 void Camera::ProcessInput() {
     // keyboard
-    static float moveSpeed = 2.0f;
+    static float moveSpeed = 5.0f;
 
+    // speed control
+    if (Input::GetKeyDown(GLFW_KEY_UP)) {
+        moveSpeed = moveSpeed >= 10 ? moveSpeed : moveSpeed + 1;
+    }
+    if (Input::GetKeyDown(GLFW_KEY_DOWN)) {
+        moveSpeed = moveSpeed <= 1 ? moveSpeed : moveSpeed - 1;
+    }
+
+    // move control
     vec3 right = transform->GetAxisX();
     vec3 front = -transform->GetAxisZ();
     vec3 up = vec3(0, 1, 0);

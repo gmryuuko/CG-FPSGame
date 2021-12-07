@@ -8,11 +8,8 @@
 
 // FPS风格的摄像机
 class Camera {
-
-private:
-    Transform* transform;
-
 public:
+    Transform* transform;
     float zoom = 45;
     Camera();
     glm::mat4 GetViewMatrix();

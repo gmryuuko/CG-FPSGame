@@ -22,23 +22,23 @@ Transform::Transform(vec3 position, vec3 rotation, vec3 scale) {
 
 void Transform::UpdateModelMatrix() {
 	// 位移矩阵
-	mat4 tr = translate(mat4(1), position);
+	translateMatrix = translate(mat4(1), position);
 	// 旋转矩阵，内旋顺序Z-Y-X，相当于外旋顺序X-Y-Z
 	mat4 rx = rotate(mat4(1), radians(rotation.x), vec3(1, 0, 0));
 	mat4 ry = rotate(mat4(1), radians(rotation.y), vec3(0, 1, 0));
 	mat4 rz = rotate(mat4(1), radians(rotation.z), vec3(0, 0, 1));
-	mat4 ro = rz * ry * rx;
+	rotationMatrix = rz * ry * rx;
 	// 缩放矩阵
-	mat4 sc = glm::scale(mat4(1), scale);
+	scaleMatrix = glm::scale(mat4(1), scale);
 	// model matrix，缩放->旋转->位移
-	modelMatrix = tr * ro * sc * mat4(1);
+	modelMatrix = translateMatrix * rotationMatrix * scaleMatrix * mat4(1);
 	// local 坐标轴
-	axisX = ro * vec4(1, 0, 0, 0);
-	axisY = ro * vec4(0, 1, 0, 0);
-	axisZ = ro * vec4(0, 0, 1, 0);
+	axisX = rotationMatrix * vec4(1, 0, 0, 0);
+	axisY = rotationMatrix * vec4(0, 1, 0, 0);
+	axisZ = rotationMatrix * vec4(0, 0, 1, 0);
 
 	if (parent != nullptr) {
-		modelMatrix = parent->GetModelMatrix() * modelMatrix;
+		modelMatrix = parent->GetTranslateMatrix() * parent->GetRotationMatrix() * modelMatrix;
 	}
 
 	dirty = false;
@@ -62,6 +62,21 @@ void Transform::CheckDirty() {
 mat4 Transform::GetModelMatrix() {
 	CheckDirty();
 	return modelMatrix;
+}
+
+mat4 Transform::GetTranslateMatrix() {
+	CheckDirty();
+	return translateMatrix;
+}
+
+mat4 Transform::GetRotationMatrix() {
+	CheckDirty();
+	return rotationMatrix;
+}
+
+mat4 Transform::GetScaleMatrix() {
+	CheckDirty();
+	return scaleMatrix;
 }
 
 void Transform::SetPosition(const vec3& position) {

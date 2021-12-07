@@ -3,9 +3,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-class Texture {
-private:
+#include <string>
 
+struct Texture {
+    unsigned int texId;
+    std::string path;
 };
 
 #endif
