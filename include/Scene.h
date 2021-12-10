@@ -16,6 +16,7 @@ public:
 	Skybox* skybox = nullptr;
 	std::vector<GameObject*> gameObjects;
 	std::vector<Light::PointLight*> pointLights;
+	std::vector<Light::DirLight*> dirLights;
 
 	Scene();
 	virtual void ProcessInput();

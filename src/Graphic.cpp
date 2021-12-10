@@ -58,7 +58,7 @@ GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsign
     // depth test
     glEnable(GL_DEPTH_TEST);
     // cull back face
-    // glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     // v sync
     glfwSwapInterval(1);
 
@@ -158,6 +158,10 @@ void RenderScene(Scene& scene) {
     mainShader->SetInt("nPointLights", scene.pointLights.size());
     for (int i = 0; i < scene.pointLights.size(); i++) {
         Light::SetPointLight(*mainShader, i, scene.pointLights[i]);
+    }
+    mainShader->SetInt("nDirLights", scene.dirLights.size());
+    for (int i = 0; i < scene.dirLights.size(); i++) {
+        Light::SetDirLight(*mainShader, i, scene.dirLights[i]);
     }
 
     // render object

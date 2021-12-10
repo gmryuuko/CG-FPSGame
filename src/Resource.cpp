@@ -47,6 +47,7 @@ namespace Resource {
 
     Texture* LoadTexture(const string& path) {
         std::cout << "[Resource] Texture Loading: " << path << std::endl;
+        stbi_set_flip_vertically_on_load(true);
 
         Texture *texture = new Texture();
 

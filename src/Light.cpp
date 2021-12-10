@@ -13,4 +13,12 @@ namespace Light {
         shader.SetVec3(alight + "diffuse", light->diffuse);
         shader.SetVec3(alight + "specular", light->specular);
     }
+    void SetDirLight(Shader& shader, int index, DirLight* light) {
+        shader.Use();
+        string alight = "dirLights[" + to_string(index) + "].";
+        shader.SetVec3(alight + "direction", light->direction);
+        shader.SetVec3(alight + "ambient", light->ambient);
+        shader.SetVec3(alight + "diffuse", light->diffuse);
+        shader.SetVec3(alight + "specular", light->specular);
+    }
 }
