@@ -35,6 +35,9 @@ uniform PointLight pointLights[16];
 uniform int nDirLights;
 uniform DirLight dirLights[16];
 
+// shadow
+uniform sampler2D depthMap;
+
 // view
 uniform vec3 viewPos;
 
@@ -42,27 +45,33 @@ uniform vec3 viewPos;
 in vec3 fragPos;
 in vec3 normal;
 in vec2 texCoords;
+in vec4 fragPosLightSpace;
 
 out vec4 FragColor;
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, float lighting);
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, float lighting);
+float CalcShadow(vec4 pos, vec3 normal, vec3 lightDir);
 
 void main() {
     vec3 viewDir = normalize(viewPos - fragPos); // frag -> view
+    
+    // 是否被照亮
+    float lighting = 1 - CalcShadow(fragPosLightSpace, normal, -dirLights[0].direction);
 
     vec3 result = vec3(0, 0, 0);
     for (int i = 0; i < nPointLights; i++) {
-        result += CalcPointLight(pointLights[i], normal, fragPos, viewDir);
+        result += CalcPointLight(pointLights[i], normal, fragPos, viewDir, lighting);
     }
     for (int i = 0; i < nDirLights; i++) {
-        result += CalcDirLight(dirLights[i], normal, viewDir);
+        result += CalcDirLight(dirLights[i], normal, viewDir, lighting);
     }
 
     FragColor = vec4(result, 1.0);
+    // FragColor = vec4(lighting);
 }
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, float lighting) {
     vec3 ambient, diffuse, specular;
     vec3 lightDir = normalize(light.position - fragPos); // frag -> light
 
@@ -84,11 +93,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // 衰减
 
     // mix
-    // return ambient + diffuse + specular;
-    return ambient + diffuse + specular;
+    return ambient + lighting * (diffuse + specular);
 }
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) {
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, float lighting) {
     vec3 ambient, diffuse, specular;
     vec3 lightDir = normalize(-light.direction);
 
@@ -108,5 +116,19 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) {
     specular = light.specular * spec * colorS;
 
     // mix
-    return ambient + diffuse + specular;
+    return ambient + lighting * (diffuse + specular);
+}
+
+float CalcShadow(vec4 pos, vec3 normal, vec3 lightDir) {
+    // 透视除法
+    vec3 projCoords = pos.xyz / pos.w;
+    // [-1, 1] -> [0, 1]
+    projCoords = projCoords * 0.5 + 0.5;
+    // 检查当前片段是否处于阴影中
+    float closestDepth = texture(depthMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
 }

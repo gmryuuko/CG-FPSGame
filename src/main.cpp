@@ -44,6 +44,10 @@ int main() {
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    int texture_units;
+    glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &texture_units);
+    std::cout << "Max vertex texture image units: " << texture_units << std::endl;
+
     std::cout << "Start rendering." << std::endl;
 
     while (!Graphic::Closed()) {
@@ -66,9 +70,11 @@ int main() {
 
 Scene& SetSceneManually() {
     Scene& scene = *(new Scene());
+
     // camera
     scene.mainCamera = new Camera();
     scene.mainCamera->transform->SetPosition(glm::vec3(0, 2, 5));
+
     // skybox
     scene.skybox = new Skybox(vector<string>{
             "cubemap/universe/1k_px.jpg",
@@ -78,38 +84,49 @@ Scene& SetSceneManually() {
             "cubemap/universe/1k_pz.jpg",
             "cubemap/universe/1k_nz.jpg",
     });
+
     // objects
-
-    auto sun = new GameObject(Resource::GetModel("sun/Sun.obj"));
-    sun->transform->SetScale(glm::vec3(1.5 / 20000));
-    sun->transform->SetPosition(glm::vec3(0, 8, 0));
-    sun->isLight = true;
-    scene.gameObjects.emplace_back(sun);
-    auto nanosuit = new GameObject(Resource::GetModel("nanosuit/nanosuit.obj"));
-    nanosuit->transform->SetScale(glm::vec3(1.0 / 10));
-    scene.gameObjects.emplace_back(nanosuit);
-    for (int i = 0; i < 10; i++) {
-        auto earth = new GameObject(Resource::GetModel("earth/Earth 2K.obj"));
-        earth->transform->SetPosition(glm::vec3(2 * i, 2 * i, 2 * i));
-        earth->transform->SetScale(glm::vec3(1.0 / 4));
-        scene.gameObjects.emplace_back(earth);
+    // sun
+//    auto sun = new GameObject(Resource::GetModel("sun/Sun.obj"));
+//    sun->transform->SetScale(glm::vec3(1.5 / 20000));
+//    sun->transform->SetPosition(glm::vec3(0, 8, 0));
+//    sun->isLight = true;
+//    scene.gameObjects.emplace_back(sun);
+    // nanosuit
+//    auto nanosuit = new GameObject(Resource::GetModel("nanosuit/nanosuit.obj"));
+//    nanosuit->transform->SetScale(glm::vec3(1.0 / 10));
+//    scene.gameObjects.emplace_back(nanosuit);
+    // earth
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                auto earth = new GameObject(Resource::GetModel("earth/Earth 2K.obj"));
+                earth->transform->SetPosition(glm::vec3(i, j + 2, k));
+                earth->transform->SetScale(glm::vec3(1.0 / 10));
+                scene.gameObjects.emplace_back(earth);
+            }
+        }
     }
-
+    // cottage
     auto cottage = new GameObject(Resource::GetModel("cottage/cottage_obj.obj"));
     cottage->transform->SetScale(glm::vec3(1.0 / 10));
     scene.gameObjects.emplace_back(cottage);
+
     // light
-    auto dirLight = new Light::DirLight{ glm::vec3(0, -1, -1), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.7, 0.7, 0.7), glm::vec3(1, 1, 1) };
-    /*
-    auto pointLight = new Light::PointLight{
-        sun->transform->GetPosition(),
-        glm::vec3(0.2, 0.2, 0.2),
-        glm::vec3(0.8, 0.8, 0.8),
-        glm::vec3(1, 1, 1),
-        0, 0, 0
-    };
-     */
+    // direction
+    auto dirLight = new Light::DirLight{ glm::vec3(-1, -1, -1),
+                                         glm::vec3(0.2, 0.2, 0.2),
+                                         glm::vec3(0.7, 0.7, 0.7),
+                                         glm::vec3(1, 1, 1) };
     scene.dirLights.emplace_back(dirLight);
+    // point
+//    auto pointLight = new Light::PointLight{
+//        sun->transform->GetPosition(),
+//        glm::vec3(0.2, 0.2, 0.2),
+//        glm::vec3(0.8, 0.8, 0.8),
+//        glm::vec3(1, 1, 1),
+//        0, 0, 0
+//    };
     // scene.pointLights.emplace_back(pointLight);
     // SolarSystem solarSystem;
 

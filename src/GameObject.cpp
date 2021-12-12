@@ -7,12 +7,12 @@ GameObject::GameObject(Model* model) {
 	this->transform->gameObject = this;
 }
 
-void GameObject::Draw(const Shader& objShader, const Shader& lightShader) {
+void GameObject::Draw(const Shader& objShader, const Shader& lightShader, bool drawLight) {
 	const Shader& shader = this->isLight ? lightShader : objShader;
 	
 	shader.Use();
 	shader.SetMat4(Graphic::UNIFORM_MODEL_MATRIX, transform->GetModelMatrix());
-	if (model != nullptr)
+	if (model != nullptr && (!this->isLight || drawLight))
 		model->Draw(shader);
 
 	for (auto& tr : transform->children) {

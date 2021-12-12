@@ -17,7 +17,7 @@ public:
 	Transform* transform;
 	GameObject(Model* model);
 	// 设置model矩阵，然后绘制
-	void Draw(const Shader& objShader, const Shader& lightShader);
+	void Draw(const Shader& objShader, const Shader& lightShader, bool drawLight = true);
 
 	void SetParent(GameObject* parent);
 
