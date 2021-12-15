@@ -12,11 +12,14 @@ namespace Graphic {
 
 void InitShader();
 void InitShadowMapping();
+void InitHdr();
+void InitBloom();
+void InitQuad();
 void FrameBufferSizeCallback(GLFWwindow* window, int scrWidth, int scrHeight);
 
+// Settings
 // 阴影贴图尺寸
 const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
-
 // 窗口
 GLFWwindow* window = nullptr;
 // 窗口宽度
@@ -27,21 +30,48 @@ unsigned int scrHeight = 0;
 unsigned int clearBit = 0;
 // 清屏颜色
 glm::vec4 clearColor = glm::vec4(0, 0, 0, 1);
+
+// Shader
 // 一般物体的Shader
 Shader* mainShader = nullptr;
+Shader* mainShader_v1 = nullptr;
+Shader* mainShader_v2 = nullptr;
 // 发光体Shader
 Shader* lightShader = nullptr;
 // 天空盒Shader
 Shader* skyboxShader = nullptr;
 // 深度贴图
 Shader* depthShader = nullptr;
+// HDR
+Shader* hdrShader = nullptr;
 // Debug用
 Shader* texShader = nullptr;
+// 高斯模糊
+Shader* blurShader = nullptr;
+
+// Shadow
 // 深度帧缓冲
 unsigned int depthMapFBO = 0;
 // 深度贴图
 unsigned int depthMap = 0;
 
+// HDR
+// 帧缓冲
+unsigned int hdrFBO = 0;
+// 颜色缓冲
+unsigned int hdrBuffer[2] = { 0 };
+// 启用HDR
+bool hdrOn = false;
+// 曝光度
+float hdrExposure = 1.0;
+
+// Bloom
+bool bloomOn = false;
+unsigned int blurFBO[2];
+unsigned int blurBuffer[2];
+
+//
+unsigned int quadVao;
 
 GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight) {
     
@@ -89,6 +119,12 @@ GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsign
     InitShader();
     // Init shadow map
     InitShadowMapping();
+    // init hdr
+    InitHdr();
+    // bloom
+    InitBloom();
+
+    InitQuad();
 
     return window;
 }
@@ -138,20 +174,6 @@ void SwapFrame() {
 
     glfwSwapBuffers(window);
     glfwPollEvents();
-
-    if (Input::GetKeyUp(GLFW_KEY_ESCAPE)) {
-        std::cout << "ESC up" << std::endl;
-        glfwSetWindowShouldClose(window, true);
-    }
-    if (Input::GetKeyDown(GLFW_KEY_SPACE)) {
-        std::cout << "Space down" << std::endl;
-    }
-    if (Input::GetKey(GLFW_KEY_SPACE)) {
-        std::cout << "Space pressing" << std::endl;
-    }
-    if (Input::GetKeyUp(GLFW_KEY_SPACE)) {
-        std::cout << "Space up" << std::endl;
-    }
 }
 
 void SetVSync(unsigned int value) {
@@ -159,11 +181,38 @@ void SetVSync(unsigned int value) {
 }
 
 void InitShader() {
-    mainShader = new Shader("../shader/main.vert", "../shader/main.frag");
+    mainShader_v1 = new Shader("../shader/main.vert", "../shader/main.frag");
+    mainShader_v2 = new Shader("../shader/main_v2.vert", "../shader/main_v2.frag");
+    mainShader = mainShader_v2;
     lightShader = new Shader("../shader/light.vert", "../shader/light.frag");
     skyboxShader = new Shader("../shader/skybox.vert", "../shader/skybox.frag");
     texShader = new Shader("../shader/showTexture.vert", "../shader/showTexture.frag");
     depthShader = new Shader("../shader/depth.vert", "../shader/depth.frag");
+    hdrShader = new Shader("../shader/hdr.vert", "../shader/hdr.frag");
+    blurShader = new Shader("../shader/blur.vert", "../shader/blur.frag");
+}
+
+void InitQuad() {
+    unsigned int quadVbo = 0;
+    if (quadVao == 0) {
+        float quadVertices[] = {
+                // positions        // texture Coords
+                -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+                -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+                1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+        glad_glGenVertexArrays(1, &quadVao);
+        glad_glGenBuffers(1, &quadVbo);
+        glad_glBindVertexArray(quadVao);
+        glad_glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
+        glad_glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        glad_glEnableVertexAttribArray(0);
+        glad_glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glad_glEnableVertexAttribArray(1);
+        glad_glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
+
 }
 
 void InitShadowMapping() {
@@ -184,6 +233,58 @@ void InitShadowMapping() {
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void InitHdr() {
+    // HDR frame buffer
+    glad_glGenFramebuffers(1, &hdrFBO);
+    glad_glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+    // HDR color buffer
+    glad_glGenTextures(2, hdrBuffer);
+    for (int i = 0; i < 2; i++) {
+        glad_glBindTexture(GL_TEXTURE_2D, hdrBuffer[i]);
+        glad_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, scrWidth, scrHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);  // we clamp to the edge as the blur filter would otherwise sample repeated texture values!
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // add color buffer to hdrFBO
+        glad_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, hdrBuffer[i], 0);
+    }
+    // depth buffer
+    static unsigned int rboDepth;
+    glad_glGenRenderbuffers(1, &rboDepth);
+    glad_glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glad_glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, scrWidth, scrHeight);
+    glad_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+    // 声明使用了两个color buffer
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glad_glDrawBuffers(2, attachments);
+
+    // check
+    if (glad_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "Framebuffer not complete!" << std::endl;
+
+    glad_glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void InitBloom() {
+    glad_glGenFramebuffers(2, blurFBO);
+    glad_glGenTextures(2, blurBuffer);
+    for (int i = 0; i < 2; i++) {
+        glad_glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i]);
+        glad_glBindTexture(GL_TEXTURE_2D, blurBuffer[i]);
+        glad_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, scrWidth, scrHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // we clamp to the edge as the blur filter would otherwise sample repeated texture values!
+        glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glad_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffer[i], 0);
+        // check
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "Framebuffer not complete!" << std::endl;
+    }
 }
 
 void RenderTexture(unsigned int texId) {
@@ -222,7 +323,7 @@ void RenderTexture(unsigned int texId) {
     glad_glBindVertexArray(0);
 }
 
-void RenderDirLightShadow(Scene& scene, Light::DirLight& light, unsigned int texId) {
+mat4 RenderDirLightShadow(Scene& scene, Light::DirLight& light, unsigned int texId) {
 
     texShader->Use();
     texShader->SetInt("depthMap", 8);
@@ -240,18 +341,54 @@ void RenderDirLightShadow(Scene& scene, Light::DirLight& light, unsigned int tex
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
+    glad_glCullFace(GL_FRONT);
     for (auto& obj : scene.gameObjects) {
         // 光源不会有阴影吧
         obj->Draw(*depthShader, *depthShader, false);
     }
+    glad_glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, scrWidth, scrHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    return lightSpaceMatrix;
+}
 
-    // TODO: 这个放到外面
-    mainShader->Use();
-    mainShader->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+void RenderHdr() {
+    glad_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    hdrShader->Use();
+    hdrShader->SetInt("hdrBuffer", 0);
+    glad_glActiveTexture(GL_TEXTURE0);
+    glad_glBindTexture(GL_TEXTURE_2D, hdrBuffer[0]);
+    hdrShader->SetInt("brightBuffer", 1);
+    glad_glActiveTexture(GL_TEXTURE1);
+    glad_glBindTexture(GL_TEXTURE_2D, bloomOn ? blurBuffer[0] : hdrBuffer[1]);
+
+    glad_glBindVertexArray(quadVao);
+    glad_glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+void RenderBloom() {
+    bool horizontal = true, first = true;
+    int amount = 10;
+    blurShader->Use();
+    blurShader->SetInt("image", 0);
+    glad_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for (int i = 0; i < amount; i++) {
+        glad_glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[horizontal]);
+        glad_glClear(GL_COLOR_BUFFER_BIT);
+        blurShader->SetInt("horizontal", horizontal);
+        glad_glActiveTexture(GL_TEXTURE0);
+        glad_glBindTexture(GL_TEXTURE_2D, first ? hdrBuffer[1] : blurBuffer[!horizontal]);
+
+        glad_glBindVertexArray(quadVao);
+        glad_glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glad_glBindVertexArray(0);
+
+        horizontal = !horizontal;
+        first = false;
+    }
+    glad_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RenderScene(Scene& scene) {
@@ -266,12 +403,15 @@ void RenderScene(Scene& scene) {
         std::cerr << "No direction light." << std::endl;
         return;
     }
-    RenderDirLightShadow(scene, *scene.dirLights[0], depthMap);
+    mat4 lightSpaceMatrix;
+    lightSpaceMatrix = RenderDirLightShadow(scene, *scene.dirLights[0], depthMap);
 
     // show depth map
     // RenderTexture(depthMap);
     // return;
 
+    glad_glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+    glad_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Set camera
     mat4 projection = perspective(glm::radians(scene.mainCamera->zoom), (float)scrWidth / (float)scrHeight, 0.1f, 100.0f);
     mainShader->Use();
@@ -284,6 +424,7 @@ void RenderScene(Scene& scene) {
 
     // set light
     mainShader->Use();
+    mainShader->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
     mainShader->SetInt("nPointLights", scene.pointLights.size());
     for (int i = 0; i < scene.pointLights.size(); i++) {
         Light::SetPointLight(*mainShader, i, scene.pointLights[i]);
@@ -313,6 +454,44 @@ void RenderScene(Scene& scene) {
         skyboxShader->SetMat4(UNIFORM_PROJECTION_MATRIX, projection);
         scene.skybox->Draw(*skyboxShader);
     }
+
+    glad_glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    if (bloomOn) {
+        RenderBloom();
+    }
+
+    RenderHdr();
 }
+
+void ProcessInput() {
+    if (Input::GetKeyUp(GLFW_KEY_ESCAPE)) {
+        std::cout << "ESC up" << std::endl;
+        glfwSetWindowShouldClose(window, true);
+    }
+    if (Input::GetKeyDown(GLFW_KEY_N)) {
+        if (mainShader == mainShader_v1) {
+            mainShader = mainShader_v2;
+            std::cout << "Normal texture enable." << std::endl;
+        } else {
+            mainShader = mainShader_v1;
+            std::cout << "Normal texture disable." << std::endl;
+        }
+    }
+    if (Input::GetKeyDown(GLFW_KEY_H)) {
+        hdrShader->Use();
+        hdrOn = !hdrOn;
+        hdrShader->SetBool("hdrOn", hdrOn);
+        hdrShader->SetFloat("exposure", hdrExposure);
+        std::cout << "HDR " << (hdrOn ? "on" : "off") << ", exposure: " << hdrExposure << std::endl;
+    }
+    if (Input::GetKeyDown(GLFW_KEY_B)) {
+        hdrShader->Use();
+        bloomOn = !bloomOn;
+        hdrShader->SetBool("bloomOn", bloomOn);
+        std::cout << "Bloom " << (bloomOn ? "on" : "off") << "." << std::endl;
+    }
+}
+
 
 } // namespace 

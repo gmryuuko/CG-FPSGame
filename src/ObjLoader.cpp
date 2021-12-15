@@ -20,6 +20,30 @@ namespace ObjLoader {
 		return res;
 	}
 
+    // TODO: 这里直接忽略了obj文件中的顶点法线，直接使用面法线当作三个顶点的法线，这样做对吗？
+    void CalcTBN(Vertex& a, Vertex& b, Vertex&c) {
+        vec3 e1 = b.position - a.position;
+        vec3 e2 = c.position - a.position;
+        vec3 normal = normalize(cross(e1, e2));
+        vec2 uv1 = b.texCoord - a.texCoord;
+        vec2 uv2 = c.texCoord - a.texCoord;
+        vec3 tangent, bitanget;
+
+        float f = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+        tangent.x = f * (uv2.y * e1.x - uv1.y * e2.x);
+        tangent.y = f * (uv2.y * e1.y - uv1.y * e2.y);
+        tangent.z = f * (uv2.y * e1.z - uv1.y * e2.z);
+        tangent = normalize(tangent);
+        bitanget.x = f * (-uv2.x * e1.x + uv1.x * e2.x);
+        bitanget.y = f * (-uv2.x * e1.y + uv1.x * e2.y);
+        bitanget.z = f * (-uv2.x * e1.z + uv1.x * e2.z);
+        bitanget = normalize(bitanget);
+
+        a.tangent = b.tangent = c.tangent = tangent;
+        a.bitangent = b.bitangent = c.bitangent = bitanget;
+        //a.normal = b.normal = c.normal = normal;
+    };
+
 	Model* LoadModel(const string& path) {
 		auto mtls = LoadMetarial(path);
 		cout << "\t.mtl read." << endl;
@@ -121,7 +145,10 @@ namespace ObjLoader {
 						Vertex aVertex;
 						aVertex.position = positions[stoi(ns[0]) - 1];
 						if (ns.size() >= 2 && ns[1].size() != 0) aVertex.texCoord = texCoords[stoi(ns[1]) - 1];
-						if (ns.size() >= 3 && ns[2].size() != 0) aVertex.normal = normals[stoi(ns[2]) - 1];
+						if (ns.size() >= 3 && ns[2].size() != 0) {
+                            aVertex.normal = normals[stoi(ns[2]) - 1];
+
+                        }
 						vertices->emplace_back(aVertex);
 						delete nums;
 					}
@@ -131,12 +158,14 @@ namespace ObjLoader {
 					indices->emplace_back(index);
 					indices->emplace_back(index + 1);
 					indices->emplace_back(index + 2);
+                    CalcTBN((*vertices)[index], (*vertices)[index + 1], (*vertices)[index + 2]);
 
 					// 如果是4个点的面，还要再加一个三角形
 					if (ws.size() == 5) {
 						indices->emplace_back(index + 2);
 						indices->emplace_back(index + 3);
 						indices->emplace_back(index);
+                        CalcTBN((*vertices)[index + 2], (*vertices)[index + 3], (*vertices)[index]);
 					}
 				}
 			}
@@ -282,7 +311,15 @@ namespace ObjLoader {
 					string texPath = ws.at(1);
 					curMtl.texSpecular = Resource::GetTexture(texPath, directory);
 				}
-			}
+			} else if (ws[0] == "norm" || ws[0] == "map_norm") {
+                if (ws.size() < 2) {
+                    fail = true;
+                }
+                else {
+                    string texPath = ws.at(1);
+                    curMtl.texNormal = Resource::GetTexture(texPath, directory);
+                }
+            }
 
 			delete words;
 

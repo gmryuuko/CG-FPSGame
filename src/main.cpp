@@ -14,6 +14,7 @@
 #include "Model.h"
 #include "Light.h"
 #include "SolarSystem.h"
+#include "ObjLoader.h"
 
 using namespace std;
 
@@ -56,6 +57,7 @@ int main() {
         Graphic::Clear();
 
         // process input
+        Graphic::ProcessInput();
         scene.ProcessInput();
 
         // render
@@ -97,20 +99,33 @@ Scene& SetSceneManually() {
 //    nanosuit->transform->SetScale(glm::vec3(1.0 / 10));
 //    scene.gameObjects.emplace_back(nanosuit);
     // earth
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                auto earth = new GameObject(Resource::GetModel("earth/Earth 2K.obj"));
-                earth->transform->SetPosition(glm::vec3(i, j + 2, k));
-                earth->transform->SetScale(glm::vec3(1.0 / 10));
-                scene.gameObjects.emplace_back(earth);
-            }
-        }
-    }
+//    for (int i = 0; i < 3; i++) {
+//        for (int j = 0; j < 3; j++) {
+//            for (int k = 0; k < 3; k++) {
+//                auto earth = new GameObject(Resource::GetModel("earth/Earth 2K.obj"));
+//                earth->transform->SetPosition(glm::vec3(i, j + 4, k));
+//                earth->transform->SetScale(glm::vec3(1.0 / 10));
+//                scene.gameObjects.emplace_back(earth);
+//            }
+//        }
+//    }
     // cottage
     auto cottage = new GameObject(Resource::GetModel("cottage/cottage_obj.obj"));
     cottage->transform->SetScale(glm::vec3(1.0 / 10));
     scene.gameObjects.emplace_back(cottage);
+
+    // cube
+    auto cube = new GameObject(Resource::GetModel("brick/cube.obj"));
+    cube->transform->SetPosition(glm::vec3(0, 0, 3));
+    scene.gameObjects.emplace_back(cube);
+    // ground
+    auto ground = new GameObject(Resource::GetModel("stone/ground.obj"));
+    scene.gameObjects.emplace_back(ground);
+    // light cube
+    auto lightCube = new GameObject(Resource::GetModel("cube/light_cube.obj"));
+    lightCube->transform->SetPosition(glm::vec3(5, 5, 5));
+    lightCube->isLight = true;
+    scene.gameObjects.emplace_back(lightCube);
 
     // light
     // direction
@@ -119,6 +134,7 @@ Scene& SetSceneManually() {
                                          glm::vec3(0.7, 0.7, 0.7),
                                          glm::vec3(1, 1, 1) };
     scene.dirLights.emplace_back(dirLight);
+//    scene.dirLights.emplace_back(dirLight);
     // point
 //    auto pointLight = new Light::PointLight{
 //        sun->transform->GetPosition(),
@@ -131,4 +147,28 @@ Scene& SetSceneManually() {
     // SolarSystem solarSystem;
 
     return scene;
+}
+
+void TestCalcTBN() {
+    Vertex a{
+            glm::vec3(-1, 1, 0),
+            glm::vec3(0),
+            glm::vec2(0, 1)
+    };
+    Vertex b {
+            glm::vec3(-1, -1, 0),
+            glm::vec3(0),
+            glm::vec2(0, 0)
+    };
+    Vertex c {
+            glm::vec3(1, -1, 0),
+            glm::vec3(0),
+            glm::vec2(1, 0)
+    };
+
+    ObjLoader::CalcTBN(a, b, c);
+
+    cout << glm::to_string(a.tangent) << endl
+         << glm::to_string(a.bitangent) << endl
+         << glm::to_string(a.normal) << endl;
 }

@@ -33,8 +33,10 @@ const std::string UNIFORM_SHININESS = "shininess";
 // texture
 const std::string UNIFORM_USE_DIFFUSE_TEX = "useTexDiff";
 const std::string UNIFORM_USE_SPECULAR_TEX = "useTexSpec";
+const std::string UNIFORM_USE_NORMAL_TEX = "useTexNormal";
 const std::string UNIFORM_DIFFUSE_TEX = "texDiffuse";
 const std::string UNIFORM_SPECULAR_TEX = "texSpecular";
+const std::string UNIFORM_NORMAL_TEX = "texNormal";
 
 
 // 创建窗口
@@ -56,6 +58,7 @@ void SetClearColor(glm::vec4 color);
 void RenderScene(Scene& scene);
 // 0: 关闭, 1: 打开, 2: 一半...
 void SetVSync(unsigned int value);
+void ProcessInput();
 };  // namespace Graphic
 
 #endif

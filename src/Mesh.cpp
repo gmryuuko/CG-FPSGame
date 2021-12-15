@@ -82,6 +82,14 @@ void Mesh::Draw(const Shader& shader) {
 		shader.SetBool(Graphic::UNIFORM_USE_SPECULAR_TEX, true);
 		shader.SetInt(Graphic::UNIFORM_SPECULAR_TEX, 1);
 	}
+    if (this->material.texNormal == nullptr) {
+        shader.SetBool(Graphic::UNIFORM_USE_NORMAL_TEX, false);
+    } else {
+        glad_glActiveTexture(GL_TEXTURE2);
+        glad_glBindTexture(GL_TEXTURE_2D, this->material.texNormal->texId);
+        shader.SetBool(Graphic::UNIFORM_USE_NORMAL_TEX, true);
+        shader.SetInt(Graphic::UNIFORM_NORMAL_TEX, 2);
+    }
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, indices->size(), GL_UNSIGNED_INT, 0);
 }
