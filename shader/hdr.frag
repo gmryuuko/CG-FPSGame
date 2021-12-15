@@ -13,7 +13,7 @@ void main() {
     const float gamma = 2.2;
     vec3 hdrColor = texture(hdrBuffer, TexCoords).rgb;
     vec3 brightColor = texture(brightBuffer, TexCoords).rgb;
-    
+
     if (bloomOn) {
         hdrColor += brightColor;
     }
