@@ -7,6 +7,7 @@ using namespace glm;
 
 Camera::Camera() {
     this->transform = new Transform();
+    light = nullptr;
 }
 
 mat4 Camera::GetViewMatrix() {
@@ -17,6 +18,7 @@ mat4 Camera::GetViewMatrix() {
 }
 
 void Camera::ProcessInput() {
+
     // keyboard
     static float moveSpeed = 5.0f;
 
@@ -91,8 +93,18 @@ void Camera::ProcessInput() {
     transform->RotateY(-deltaXpos);
     transform->RotateX(-deltaYpos, true);
 
+
+    // 移动绑定的聚光灯
+    if (light != nullptr) {
+        light->position = transform->GetPosition();
+        light->direction = -transform->GetAxisZ();
+    }
 }
 
 void Camera::SetTransform(const Transform& transform) {
     *(this->transform) = transform;
+}
+
+void Camera::BindSpotLight(Light::SpotLight* light) {
+    this->light = light;
 }

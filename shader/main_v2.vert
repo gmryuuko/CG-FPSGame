@@ -13,28 +13,38 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 lightSpaceMatrix;
+uniform mat4 spotLightSpaceMatrix;
 
 out Vsout {
     vec3 fragPos;
+    vec3 viewFragPos;
     vec3 normal;
     vec2 texCoords;
     vec4 fragPosLightSpace;
+    vec4 fragPosSpotLightSpace;
     mat3 TBN;
+    mat4 view;
 } vsout;
 
 
 void main() {
 
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    vec4 modelPos = model * vec4(aPos, 1.0);
+    vec4 viewPos = view * modelPos;
+
+    gl_Position = projection * viewPos;
 
     // output
-    vsout.fragPos = vec3(model * vec4(aPos, 1.0));
+    vsout.fragPos = vec3(modelPos);
+    vsout.viewFragPos = vec3(viewPos);
     vsout.texCoords = aTexCoords;
     vsout.normal = normalize(mat3(model) * aNormal); // 禁止使用不等比scale
     vsout.fragPosLightSpace = lightSpaceMatrix * vec4(vsout.fragPos, 1.0);
+    vsout.fragPosSpotLightSpace = spotLightSpaceMatrix * vec4(vsout.fragPos, 1.0);
     // TBN
     vec3 T = normalize(vec3(model * vec4(tangent, 0)));
     vec3 B = normalize(vec3(model * vec4(bitangent, 0)));
-    vec3 N = normalize(vec3(model * vec4(vsout.normal, 0)));
+    vec3 N = normalize(vec3(model * vec4(aNormal, 0)));
     vsout.TBN = mat3(T, B, N);
+    vsout.view = view;
 }

@@ -13,7 +13,8 @@ link_directories(${PROJECT_SOURCE_DIR}/lib)
 
 # source directories
 aux_source_directory(${PROJECT_SOURCE_DIR}/src SOURCE)
+aux_source_directory(${PROJECT_SOURCE_DIR}/include/imgui-1.85 IMGUI_SRC)
 
 
-add_executable(fps ${SOURCE})
+add_executable(fps ${SOURCE} ${IMGUI_SRC})
 target_link_libraries(fps glfw3.lib)

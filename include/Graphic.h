@@ -38,6 +38,8 @@ const std::string UNIFORM_DIFFUSE_TEX = "texDiffuse";
 const std::string UNIFORM_SPECULAR_TEX = "texSpecular";
 const std::string UNIFORM_NORMAL_TEX = "texNormal";
 
+// 暂停输入
+bool InputBlocked();
 
 // 创建窗口
 GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight);
@@ -59,6 +61,8 @@ void RenderScene(Scene& scene);
 // 0: 关闭, 1: 打开, 2: 一半...
 void SetVSync(unsigned int value);
 void ProcessInput();
+unsigned int retWindowHeight();
+unsigned int retWindowWidth();
 };  // namespace Graphic
 
 #endif

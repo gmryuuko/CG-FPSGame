@@ -31,3 +31,23 @@ void GameObject::RemoveParent() {
 void GameObject::Test() {
 	std::cout << "!!!" << std::endl;
 }
+
+float GameObject::isHit(vec4 viewDir, vec4 viewPos) {
+	viewDir = inverse(this->transform->GetModelMatrix()) * viewDir;
+	viewPos = inverse(this->transform->GetModelMatrix()) * viewPos;
+
+	divideByW(viewDir);
+	divideByW(viewPos);
+
+
+	float dist = INFINITY;
+	//cout << "The view position is:" << viewPos.x << ", " << viewPos.y << ", " << viewPos.z << endl;
+	for (auto iter : hitboxes) {
+		//cout << "!!!" << endl;
+		float temp = iter->isHit(vec3(viewPos), vec3(viewDir));
+		if (temp < dist) {
+			dist = temp;
+		}
+	}
+	return dist;
+}

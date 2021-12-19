@@ -16,6 +16,8 @@ void Mesh::Init() {
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
 
+	if (vertices->size() == 0) return;
+
 	// bind data
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);

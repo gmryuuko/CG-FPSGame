@@ -17,6 +17,7 @@ public:
 	std::vector<GameObject*> gameObjects;
 	std::vector<Light::PointLight*> pointLights;
 	std::vector<Light::DirLight*> dirLights;
+	std::vector<Light::SpotLight*> spotLights;
 
 	Scene();
 	virtual void ProcessInput();

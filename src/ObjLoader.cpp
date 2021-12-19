@@ -11,7 +11,12 @@ namespace ObjLoader {
 	unordered_map<string, Material>* LoadMetarial(const string& path);
 
 	vector<string>* split(string& lineStr, char delim = ' ', bool ignEmpty = true) {
-		stringstream line(lineStr);
+		// 忽略前置空格
+		int first = 0;
+		for (first = 0; first < lineStr.size(); first++) {
+			if (lineStr[first] != ' ' && lineStr[first] != '\t') break;
+		}
+		stringstream line(lineStr.substr(first, lineStr.length() - first));
 		string str;
 		vector<string>* res = new vector<string>();
 		while (getline(line, str, delim)) {
@@ -21,7 +26,7 @@ namespace ObjLoader {
 	}
 
     // TODO: 这里直接忽略了obj文件中的顶点法线，直接使用面法线当作三个顶点的法线，这样做对吗？
-    void CalcTBN(Vertex& a, Vertex& b, Vertex&c) {
+    void CalcTBN(Vertex& a, Vertex& b, Vertex&c, bool hasNormal) {
         vec3 e1 = b.position - a.position;
         vec3 e2 = c.position - a.position;
         vec3 normal = normalize(cross(e1, e2));
@@ -41,7 +46,7 @@ namespace ObjLoader {
 
         a.tangent = b.tangent = c.tangent = tangent;
         a.bitangent = b.bitangent = c.bitangent = bitanget;
-        //a.normal = b.normal = c.normal = normal;
+        if (!hasNormal) a.normal = b.normal = c.normal = normal;
     };
 
 	Model* LoadModel(const string& path) {
@@ -139,6 +144,7 @@ namespace ObjLoader {
 				}
 				else {
 					int index = vertices->size();
+					bool hasNormal = false;
 					for (int vi = 1; vi < ws.size(); vi++) {
 						auto nums = split(ws[vi], '/', false); // 按'/'分割，不忽略空字符串
 						auto& ns = *nums;
@@ -147,7 +153,7 @@ namespace ObjLoader {
 						if (ns.size() >= 2 && ns[1].size() != 0) aVertex.texCoord = texCoords[stoi(ns[1]) - 1];
 						if (ns.size() >= 3 && ns[2].size() != 0) {
                             aVertex.normal = normals[stoi(ns[2]) - 1];
-
+							hasNormal = true;
                         }
 						vertices->emplace_back(aVertex);
 						delete nums;
@@ -158,14 +164,14 @@ namespace ObjLoader {
 					indices->emplace_back(index);
 					indices->emplace_back(index + 1);
 					indices->emplace_back(index + 2);
-                    CalcTBN((*vertices)[index], (*vertices)[index + 1], (*vertices)[index + 2]);
+                    CalcTBN((*vertices)[index], (*vertices)[index + 1], (*vertices)[index + 2], hasNormal);
 
 					// 如果是4个点的面，还要再加一个三角形
 					if (ws.size() == 5) {
 						indices->emplace_back(index + 2);
 						indices->emplace_back(index + 3);
 						indices->emplace_back(index);
-                        CalcTBN((*vertices)[index + 2], (*vertices)[index + 3], (*vertices)[index]);
+                        CalcTBN((*vertices)[index + 2], (*vertices)[index + 3], (*vertices)[index], hasNormal);
 					}
 				}
 			}
@@ -209,6 +215,7 @@ namespace ObjLoader {
 	}
 
 	unordered_map<string, Material>* LoadMetarial(const string& objPath) {
+		// return new unordered_map<string, Material>;
 		string directory = objPath.substr(0, objPath.rfind('/'));
 		string mtlPath = objPath.substr(0, objPath.rfind('.')) + ".mtl";
 
@@ -300,6 +307,7 @@ namespace ObjLoader {
 				}
 				else {
 					string texPath = ws.at(1);
+					std::cout << texPath << std::endl;
 					curMtl.texDiffuse = Resource::GetTexture(texPath, directory);
 				}
 			}
@@ -335,6 +343,10 @@ namespace ObjLoader {
 		
 		mtls[curMtlName] = curMtl;
 		return &mtls;
+	}
+
+	void WriteModel(const Model& model) {
+		// TODO
 	}
 
 }  // namespace ObjLoader
