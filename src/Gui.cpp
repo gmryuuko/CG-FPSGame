@@ -47,7 +47,11 @@ namespace Gui {
 		static int chosen = 0;
 
 		for (int i = 0, head = 0; i < scene.gameObjects.size(); i++) {
-			std::string str = std::string("Object") + std::to_string(i);
+			std::string str;
+			if (scene.gameObjects[i]->name == "")
+				str = std::string("Object") + std::to_string(i);
+			else str = scene.gameObjects[i]->name;
+
 			memcpy(objStr + head, str.c_str(), str.length());
 			head += str.length() + 1;
 		}
