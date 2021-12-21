@@ -60,7 +60,7 @@ void SetClearColor(glm::vec4 color);
 void RenderScene(Scene& scene);
 // 0: 关闭, 1: 打开, 2: 一半...
 void SetVSync(unsigned int value);
-void ProcessInput();
+void ProcessInput(Scene& scene);
 unsigned int retWindowHeight();
 unsigned int retWindowWidth();
 };  // namespace Graphic

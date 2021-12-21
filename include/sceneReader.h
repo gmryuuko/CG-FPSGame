@@ -8,21 +8,16 @@
 #include "Light.h"
 #include <stdio.h>
 #include <vector>
+#include <map>
 #include <string>
-
-struct objectNum {
-	int nanosuit;
-	int earth;
-	int cottage;
-	int cube;
-	int ground;
-	int lightCube;
-	int container;
-	int tower;
-};
 
 class sceneReader {
 public:
+	std::string tmpModelPath;
+	std::string tmpName;
+	std::string tmpCategory;
+	int totalNum;
+
 	sceneReader(const char* path);
 	void readCamera(Camera* camera);
 	Skybox* readSkyBox();
@@ -30,12 +25,10 @@ public:
 	Light::PointLight* readPointLight();
 	Light::DirLight* readDirLight();
 	void setTransform(Transform* transform);
-
-	objectNum objNum;
+	bool setIsLight();
 private:
 	const char* filePath;
 	const char* query;
-	
 	tinyxml2::XMLDocument doc;
 	tinyxml2::XMLElement *root;
 	tinyxml2::XMLElement *scene;//场景多了可以改成vector
@@ -46,7 +39,8 @@ private:
 	tinyxml2::XMLElement *pointLightReader;
 	tinyxml2::XMLElement *dirLightReader;
 	tinyxml2::XMLElement *element;
+	std::map<std::string, int> objMapNum;
 
 	void readVec3(float* x, float* y, float* z);
-	
+	void initMap();
 };

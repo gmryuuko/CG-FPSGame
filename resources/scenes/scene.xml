@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <scene>
+        <camera>
+            <position x="0" y="2" z="5"/>
+            <rotation x="0" y="0" z="0"/>
+            <scale x="0" y="0" z="0"/>
+        </camera>
+        <skyBox>
+            <px path="cubemap/universe/1k_px.jpg"/>
+            <nx path="cubemap/universe/1k_nx.jpg"/>
+            <py path="cubemap/universe/1k_py.jpg"/>
+            <ny path="cubemap/universe/1k_ny.jpg"/>
+            <pz path="cubemap/universe/1k_pz.jpg"/>
+            <nz path="cubemap/universe/1k_nz.jpg"/>
+        </skyBox>
+        <gameObject>
+            <list totalNum="10">
+                <container num="1"/>
+                <cottage num="1"/>
+                <cube num="1"/>
+                <earth num="3"/>
+                <ground num="1"/>
+                <lightCube num="1"/>
+                <nanosuit num="1"/>
+                <tower num="1"/>
+            </list>
+            <nanosuit name="nanosuit1">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="4.1500001" y="0.55000001" z="5"/>
+                <rotation x="0" y="-89.400002" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </nanosuit>
+            <earth name="earth1">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="-2.05" y="3.6500001" z="0.2"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <earth name="earth2">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="7.1500001" y="4" z="1"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <earth name="earth3">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="0" y="4" z="2"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <cottage name="cottage1">
+                <model path="cottage/cottage_obj.obj"/>
+                <position x="0" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </cottage>
+            <cube name="cube1">
+                <model path="brick/cube.obj"/>
+                <position x="0" y="0" z="3"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="false"/>
+            </cube>
+            <ground name="ground1">
+                <model path="stone/ground.obj"/>
+                <position x="0" y="0.0099999998" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="false"/>
+            </ground>
+            <lightCube name="lightCube1">
+                <model path="cube/light_cube.obj"/>
+                <position x="5" y="3.8499999" z="5"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="true"/>
+            </lightCube>
+            <container name="container1">
+                <model path="container/Container.obj"/>
+                <position x="0" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="0.0033" y="0.0033" z="0.0033"/>
+                <light isLight="false"/>
+            </container>
+            <tower name="tower1">
+                <model path="watch_tower/wooden_watch_tower2.obj"/>
+                <position x="0" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="false"/>
+            </tower>
+        </gameObject>
+        <pointLight>
+            <position x="5" y="5" z="5"/>
+            <ambient x="0.2" y="0.2" z="0.2"/>
+            <diffuse x="0.80000001" y="0.80000001" z="0.80000001"/>
+            <specular x="1" y="1" z="1"/>
+            <constant value="0"/>
+            <linear value="0"/>
+            <quadratic value="0"/>
+        </pointLight>
+        <dirLight>
+            <position x="10" y="10" z="10"/>
+            <direction x="-1" y="-1" z="-1"/>
+            <ambient x="0.1" y="0.1" z="0.1"/>
+            <diffuse x="0.80000001" y="0.69999999" z="0.60000002"/>
+            <specular x="1" y="1" z="1"/>
+        </dirLight>
+    </scene>
+</root>

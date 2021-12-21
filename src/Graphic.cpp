@@ -2,6 +2,8 @@
 #include "Input.h"
 #include "FrameTime.h"
 #include "Resource.h"
+#include "sceneSaver.h"
+#include "Light.h"
 
 #include <iostream>
 #include <random>
@@ -727,7 +729,7 @@ void RenderScene(Scene& scene) {
     RenderHdr();
 }
 
-void ProcessInput() {
+void ProcessInput(Scene& scene) {
 
     if (Input::GetKeyDown(GLFW_KEY_LEFT_ALT)) {
         blockInput = !blockInput;
@@ -771,6 +773,27 @@ void ProcessInput() {
             hdrShader->SetBool("ssaoOn", ssaoOn);
             std::cout << "SSAO " << (ssaoOn ? "on" : "off") << "." << std::endl;
         }
+
+		if (Input::GetKeyDown(GLFW_KEY_P)) {
+			int sum = 0;
+			sceneSaver ss("../resources/scenes/scene.xml");
+			ss.saveCamera();
+			ss.saveSkyBox();
+			for (auto iter = scene.gameObjects.cbegin(); iter != scene.gameObjects.cend(); iter++) {
+				ss.objMapNum[(*iter)->category]++;
+				sum++;
+				ss.saveGameObject((*iter));
+			}
+			ss.saveGameObjectList(sum);
+			for (auto iter = scene.pointLights.cbegin(); iter != scene.pointLights.cend(); iter++) {
+				ss.savePointLight((*iter));
+			}
+			for (auto iter = scene.dirLights.cbegin(); iter != scene.dirLights.cend(); iter++) {
+				ss.saveDirLight((*iter));
+			}
+			ss.save();
+			std::cout << "This scene has been saved!"<< std::endl;
+		}
     }
 
 }

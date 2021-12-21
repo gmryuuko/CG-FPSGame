@@ -20,6 +20,8 @@ private:
 
 public:
 	std::string name;
+	std::string category;
+	std::string modelPath;
 	std::vector<Hitbox*>hitboxes;
 	bool isLight = false;
 	Transform* transform;

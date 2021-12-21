@@ -17,12 +17,13 @@
 #include "ObjLoader.h"
 #include "Gui.h"
 #include "sceneReader.h"
+#include "sceneSaver.h"
 
 using namespace std;
 
 Scene& SetSceneManually();
 
-sceneReader sr("../resources/scene.xml");
+sceneReader sr("../resources/scenes/scene.xml");
 
 int main() {
 
@@ -43,10 +44,13 @@ int main() {
     Graphic::SetVSync(1); // v sync
     Graphic::SetCursorMode(GLFW_CURSOR_DISABLED);
 
+
+
     // ----------------------------------------------------------------
     // 手动设置场景，暂未实现从文件读取场景
     Scene& scene = SetSceneManually();
     // -----------------------------------------------------------------
+	
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -59,7 +63,7 @@ int main() {
         Gui::ShowSettings(scene);
 
         // process input
-        Graphic::ProcessInput();
+        Graphic::ProcessInput(scene);
         if (!Graphic::InputBlocked()) {
             scene.ProcessInput();
         }
@@ -87,6 +91,24 @@ Scene& SetSceneManually() {
     // skybox
 	//sr.readSkyBox(scene.skybox);
 	scene.skybox = sr.readSkyBox();
+	//gameObject
+	GameObject* gObj;
+	for (int i = 0; i < sr.totalNum; i++) {
+		gObj = sr.readGameObject();
+		gObj->name = sr.tmpName;
+		gObj->category = sr.tmpCategory;
+		gObj->modelPath = sr.tmpModelPath;
+		sr.setTransform(gObj->transform);
+		gObj->isLight = sr.setIsLight();
+		scene.gameObjects.emplace_back(gObj);
+	}
+	//dirLight
+	auto dirLight = sr.readDirLight();
+	scene.dirLights.emplace_back(dirLight);
+	//    scene.dirLights.emplace_back(dirLight);
+	//pointLight
+	auto pointLight = sr.readPointLight();
+	scene.pointLights.emplace_back(pointLight);
 	/*
 		scene.skybox = new Skybox(vector<string>{
 			"cubemap/universe/1k_px.jpg",
@@ -108,56 +130,84 @@ Scene& SetSceneManually() {
 //    scene.gameObjects.emplace_back(sun);
      //nanosuit
     //auto nanosuit = new GameObject(Resource::GetModel("nanosuit/nanosuit.obj"));
-	GameObject* lightCube;
-	
+
+
+
+	/*
 	for (int i = 0; i < sr.objNum.nanosuit;i++) {
-		auto nanosuit = sr.readGameObject();
+		nanosuit = sr.readGameObject("nanosuit");
+		nanosuit->name = sr.tmpName;
+		nanosuit->category = "nanosuit";
+		nanosuit->modelPath = sr.tmpModelPath;
 		sr.setTransform(nanosuit->transform);
 		scene.gameObjects.emplace_back(nanosuit);
 	}
+	
 	for (int i = 0; i < sr.objNum.earth; i++) {
-		auto earth = sr.readGameObject();
+		earth = sr.readGameObject("earth");
+		earth->name = sr.tmpName;
+		earth->category = "earth";
+		earth->modelPath = sr.tmpModelPath;
 		sr.setTransform(earth->transform);
 		scene.gameObjects.emplace_back(earth);
 	}
 	for (int i = 0; i < sr.objNum.cottage; i++) {
-		auto cottage = sr.readGameObject();
+		cottage = sr.readGameObject("cottage");
+		cottage->name = sr.tmpName;
+		cottage->category = "cottage";
+		cottage->modelPath = sr.tmpModelPath;
 		sr.setTransform(cottage->transform);
 		scene.gameObjects.emplace_back(cottage);
 	}
 
 	for (int i = 0; i < sr.objNum.cube; i++) {
-		auto cube = sr.readGameObject();
+		cube = sr.readGameObject("cube");
+		cube->name = sr.tmpName;
+		cube->category = "cube";
+		cube->modelPath = sr.tmpModelPath;
 		sr.setTransform(cube->transform);
 		cube->hitboxes.push_back(new Hitbox(glm::vec3(0, 0, 0), 2, 2, 2));
 		scene.gameObjects.emplace_back(cube);
 	}
 
 	for (int i = 0; i < sr.objNum.ground; i++) {
-		auto ground = sr.readGameObject();
+		ground = sr.readGameObject("ground");
+		ground->name = sr.tmpName;
+		ground->category = "ground";
+		ground->modelPath = sr.tmpModelPath;
 		sr.setTransform(ground->transform);
 		scene.gameObjects.emplace_back(ground);
 	}
 
 	for (int i = 0; i < sr.objNum.lightCube; i++) {
-		lightCube = sr.readGameObject();
+		lightCube = sr.readGameObject("lightCube");
+		lightCube->name = sr.tmpName;
+		lightCube->category = "lightCube";
+		lightCube->modelPath = sr.tmpModelPath;
 		sr.setTransform(lightCube->transform);
 		scene.gameObjects.emplace_back(lightCube);
 		lightCube->isLight = true;
 	}
 
 	for (int i = 0; i < sr.objNum.container; i++) {
-		auto container = sr.readGameObject();
+		container = sr.readGameObject("container");
+		container->name = sr.tmpName;
+		container->category = "container";
+		container->modelPath = sr.tmpModelPath;
 		sr.setTransform(container->transform);
 		scene.gameObjects.emplace_back(container);
 	}
-	printf("\n!!!!!tower:%d!!!!!\n", sr.objNum.tower);
 	for (int i = 0; i < sr.objNum.tower; i++) {
-		auto tower = sr.readGameObject();
-		printf("success!!!!!!!!!!!!!!!\n");
+		tower = sr.readGameObject("tower");
+		tower->name = sr.tmpName;
+		tower->category = "tower";
+		tower->modelPath = sr.tmpModelPath;
 		sr.setTransform(tower->transform);
 		scene.gameObjects.emplace_back(tower);
 	}
+	*/
+
+
     // earth
 	/*
 	for (int j = 0; j < 3; j++) {
@@ -214,16 +264,13 @@ Scene& SetSceneManually() {
 	auto dirLight = new Light::DirLight{
 		glm::vec3(10, 10, 10),
 		glm::vec3(-1, -1, -1),
-		glm::vec3(0.1, 0.1, 0.1),
+		glm::vec3(0.1, 0.15, 0.1),
 		glm::vec3(0.8, 0.7, 0.6),
-		glm::vec3(1, 1, 1)
+		glm::vec3(1, 0.41, 1)
 	};
 	*/
-	auto dirLight = sr.readDirLight();
-    scene.dirLights.emplace_back(dirLight);
-//    scene.dirLights.emplace_back(dirLight);
-    // point
-	auto pointLight = sr.readPointLight();
+
+
 	/*
 		auto pointLight = new Light::PointLight{
 		lightCube->transform->GetPosition(),
@@ -262,7 +309,7 @@ Scene& SetSceneManually() {
 
     scene.mainCamera->BindSpotLight(flashLight);
 
-     //scene.pointLights.emplace_back(pointLight);
+    
     // SolarSystem solarSystem;
 
     return scene;

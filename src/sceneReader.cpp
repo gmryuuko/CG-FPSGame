@@ -1,5 +1,15 @@
 #include "sceneReader.h"
 
+void sceneReader::initMap() {
+	tinyxml2::XMLElement* tmp = gameObjectReader->FirstChildElement("list");
+	totalNum = tmp->IntAttribute("totalNum");
+	tmp = tmp->FirstChildElement();
+	while (tmp) {
+		objMapNum[tmp->Name()] = tmp->IntAttribute("num");
+		tmp = tmp->NextSiblingElement();
+	}
+}
+
 sceneReader::sceneReader(const char* path) {
 	//tinyxml2::XMLError ret;
 	filePath = path;
@@ -12,24 +22,8 @@ sceneReader::sceneReader(const char* path) {
 	//std::cout << cameraReader->FindAttribute("name")->Name() << ":" << cameraReader->FindAttribute("name")->Value() << std::endl;
 	skyBoxReader = scene->FirstChildElement("skyBox");
 	gameObjectReader = scene->FirstChildElement("gameObject");
-	object = gameObjectReader->FirstChildElement("object");
-	tinyxml2::XMLElement* tmp = gameObjectReader->FirstChildElement("num");
-	tmp = tmp->FirstChildElement();
-	objNum.nanosuit=tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.earth= tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.cottage = tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.cube = tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.ground = tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.lightCube = tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.container = tmp->IntAttribute("num");
-	tmp = tmp->NextSiblingElement();
-	objNum.tower = tmp->IntAttribute("num");
+	object = gameObjectReader->FirstChildElement();
+	initMap();
 	pointLightReader = scene->FirstChildElement("pointLight");
 	dirLightReader = scene->FirstChildElement("dirLight");
 }
@@ -95,11 +89,14 @@ Skybox* sceneReader::readSkyBox() {
 }
 
 GameObject* sceneReader::readGameObject() {
-	std::string tmp;
-	element = object->FirstChildElement("model");
-	tmp = element->Attribute("path");
+	//std::string tmp;
 	object = object->NextSiblingElement();
-	return new GameObject(Resource::GetModel(tmp));
+	tmpName = object->Attribute("name");
+	tmpCategory = object->Name();
+	element = object->FirstChildElement("model");
+	tmpModelPath = element->Attribute("path");
+	//object = object->NextSiblingElement();
+	return new GameObject(Resource::GetModel(tmpModelPath));
 }
 
 Light::PointLight* sceneReader::readPointLight() {
@@ -149,4 +146,10 @@ Light::DirLight* sceneReader::readDirLight() {
 	readVec3(&x, &y, &z);
 	glm::vec3 specular(x, y, z);
 	return new Light::DirLight{ position,direction,ambient,diffuse,specular};
+}
+
+bool sceneReader::setIsLight() {
+	element = element->NextSiblingElement("light");
+	bool ret=element->BoolAttribute("isLight");
+	return ret;
 }
