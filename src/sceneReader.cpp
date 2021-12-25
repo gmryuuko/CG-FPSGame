@@ -224,7 +224,8 @@ Scene& readFromXML(const char* path) {
 
 
 	// spot
-	auto spotLight = new Light::SpotLight{
+	/*
+	* auto spotLight = new Light::SpotLight{
 		glm::vec3(-5, 5, -5),
 		glm::vec3(1, -1, 1),
 		glm::cos(glm::radians(12.5f)),
@@ -234,6 +235,8 @@ Scene& readFromXML(const char* path) {
 		glm::vec3(1, 1, 1),
 		0, 0, 0
 	};
+	*/
+	
 	auto flashLight = new Light::SpotLight{
 		glm::vec3(-5, 5, -5),
 		glm::vec3(0.1, -1, 0.1),
@@ -242,10 +245,10 @@ Scene& readFromXML(const char* path) {
 		glm::vec3(0),
 		glm::vec3(0.8, 0.8, 0.8),
 		glm::vec3(1, 1, 1),
-		0, 0, 0
+		1, 0.09, 0.032
 	};
 
-	scene.spotLights.emplace_back(spotLight);
+	//scene.spotLights.emplace_back(spotLight);
 	scene.spotLights.emplace_back(flashLight);
 
 	scene.mainCamera->BindSpotLight(flashLight);

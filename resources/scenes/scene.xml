@@ -203,9 +203,9 @@
             <ambient x="0.2" y="0.2" z="0.2"/>
             <diffuse x="0.80000001" y="0.80000001" z="0.80000001"/>
             <specular x="1" y="1" z="1"/>
-            <constant value="0"/>
-            <linear value="0"/>
-            <quadratic value="0"/>
+            <constant value="1"/>
+            <linear value="0.014"/>
+            <quadratic value="0.007"/>
         </pointLight>
         <dirLight>
             <position x="10" y="10" z="10"/>
