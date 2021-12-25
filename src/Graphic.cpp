@@ -738,6 +738,8 @@ void ProcessInput(Scene& scene) {
         }
         else {
             SetCursorMode(GLFW_CURSOR_DISABLED);
+            // GUI操作完毕，更新鼠标值
+            Input::GetCursor(scene.mainCamera->xpos, scene.mainCamera->ypos);
         }
     }
 

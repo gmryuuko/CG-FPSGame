@@ -7,6 +7,9 @@ using namespace glm;
 
 Scene::Scene() {
 	mainCamera = nullptr;
+
+    // 默认武器
+    gun = new MK14();
 }
 
 void Scene::ProcessInput() {
@@ -51,7 +54,7 @@ void Scene::ProcessInput() {
 
         vec4 viewDir = farPoint - nearPoint;
         vec4 viewPos = vec4(this->mainCamera->transform->GetPosition(), 1);
-
+        //viewPos = vec4(vec3(viewPos) + normalize(vec3(viewDir)), 1);
         float hitDistance = INFINITY; 
         GameObject* hitObject = nullptr;
         
@@ -68,6 +71,9 @@ void Scene::ProcessInput() {
             if (!hitObject->name.empty())
                 cout << "The object " << hitObject->name << " has been hit, at the distance of " << hitDistance << endl;
             else cout << "Hit an anoynomous object "<< "at the distance of " << hitDistance << endl;
+            if (hitObject->damagable) {
+                hitObject->HP -= gun->damage;
+            }
         }
         else cout << "Miss!\n";
         hitObject = nullptr;

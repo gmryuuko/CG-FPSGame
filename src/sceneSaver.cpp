@@ -89,6 +89,14 @@ void sceneSaver::saveGameObject(GameObject* obj) {
 	tinyxml2::XMLElement* light = doc.NewElement("light");
 	light->SetAttribute("isLight", obj->isLight);
 	object->InsertEndChild(light);
+	if (obj->hitable) {
+		tinyxml2::XMLElement* hitable = doc.NewElement("hitable");
+		object->InsertEndChild(hitable);
+	}
+	if (obj->hitable && obj->damagable) {
+		tinyxml2::XMLElement* damagable = doc.NewElement("damagable");
+		object->InsertEndChild(damagable);
+	}
 	gameObject->InsertEndChild(object);
 	//tinyxml2::XMLElement* num = doc.NewElement("num");
 }

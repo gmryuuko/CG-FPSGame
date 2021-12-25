@@ -20,10 +20,6 @@
 
 using namespace std;
 
-Scene& readFromXML();
-
-sceneReader sr("../resources/scenes/scene.xml");
-
 int main() {
 
     GLFWwindow* window = Graphic::CreateWindow("FPS", 1920, 1080);
@@ -44,7 +40,7 @@ int main() {
     Graphic::SetCursorMode(GLFW_CURSOR_DISABLED);
 
 
-    Scene& scene = readFromXML();
+    Scene& scene = readFromXML("../resources/scenes/scene.xml");
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -75,65 +71,4 @@ int main() {
 	return 0;
 }
 
-Scene& readFromXML() {
-    Scene& scene = *(new Scene());
 
-    // camera
-    scene.mainCamera = new Camera();
-    //scene.mainCamera->transform->SetPosition(glm::vec3(0, 2, 5));
-	sr.readCamera(scene.mainCamera);
-    // skybox
-	//sr.readSkyBox(scene.skybox);
-	scene.skybox = sr.readSkyBox();
-	//gameObject
-	GameObject* gObj;
-	for (int i = 0; i < sr.totalNum; i++) {
-		gObj = sr.readGameObject();
-		gObj->name = sr.tmpName;
-		gObj->category = sr.tmpCategory;
-		gObj->modelPath = sr.tmpModelPath;
-		sr.setTransform(gObj->transform);
-		gObj->isLight = sr.setIsLight();
-		sr.setHitbox(&(gObj->hitboxes));
-		scene.gameObjects.emplace_back(gObj);
-	}
-	//dirLight
-	auto dirLight = sr.readDirLight();
-	scene.dirLights.emplace_back(dirLight);
-	//    scene.dirLights.emplace_back(dirLight);
-	//pointLight
-	auto pointLight = sr.readPointLight();
-	scene.pointLights.emplace_back(pointLight);
-
-	
-    // spot
-    auto spotLight = new Light::SpotLight{
-        glm::vec3(-5, 5, -5),
-        glm::vec3(1, -1, 1),
-        glm::cos(glm::radians(12.5f)),
-        glm::cos(glm::radians(17.5f)),
-        glm::vec3(0),
-        glm::vec3(0.8, 0.8, 0.8),
-        glm::vec3(1, 1, 1),
-        0, 0, 0
-    };
-    auto flashLight = new Light::SpotLight{
-        glm::vec3(-5, 5, -5),
-        glm::vec3(0.1, -1, 0.1),
-        glm::cos(glm::radians(12.5f)),
-        glm::cos(glm::radians(17.5f)),
-        glm::vec3(0),
-        glm::vec3(0.8, 0.8, 0.8),
-        glm::vec3(1, 1, 1),
-        0, 0, 0
-    };
-
-    scene.spotLights.emplace_back(spotLight);
-    scene.spotLights.emplace_back(flashLight);
-
-    scene.mainCamera->BindSpotLight(flashLight);
-
-    
-
-    return scene;
-}

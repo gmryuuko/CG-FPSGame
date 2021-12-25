@@ -26,7 +26,9 @@ public:
 	std::vector<Hitbox*>hitboxes;
 	bool isLight = false;
 	Transform* transform;
-
+	bool hitable = false;
+	bool damagable = false;
+	int HP = 100;
 
 	GameObject(Model* model);
 	// 设置model矩阵，然后绘制

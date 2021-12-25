@@ -155,6 +155,18 @@ bool sceneReader::setIsLight() {
 	return ret;
 }
 
+bool sceneReader::setIsHitable() {
+	tinyxml2::XMLElement* temp = object->FirstChildElement("hitable");
+	if (temp) return true;
+	else return false;
+}
+
+bool sceneReader::setIsDamagable() {
+	tinyxml2::XMLElement* temp = object->FirstChildElement("damagable");
+	if (temp) return true;
+	else return false;
+}
+
 void sceneReader::setHitbox(std::vector<Hitbox*>* hitbox) {
 	tinyxml2::XMLElement* hitbox_center = object->FirstChildElement("hitbox_center");
 	tinyxml2::XMLElement* hitbox_size = object->FirstChildElement("hitbox_size");
@@ -176,4 +188,69 @@ void sceneReader::setHitbox(std::vector<Hitbox*>* hitbox) {
 	// 虽然不是必须的但是还是恢复一下之前的element指针
 	element = temp;
 
+}
+
+Scene& readFromXML(const char* path) {
+	Scene& scene = *(new Scene());
+	sceneReader sr(path);
+	// camera
+	scene.mainCamera = new Camera();
+	//scene.mainCamera->transform->SetPosition(glm::vec3(0, 2, 5));
+	sr.readCamera(scene.mainCamera);
+	// skybox
+	//sr.readSkyBox(scene.skybox);
+	scene.skybox = sr.readSkyBox();
+	//gameObject
+	GameObject* gObj;
+	for (int i = 0; i < sr.totalNum; i++) {
+		gObj = sr.readGameObject();
+		gObj->name = sr.tmpName;
+		gObj->category = sr.tmpCategory;
+		gObj->modelPath = sr.tmpModelPath;
+		sr.setTransform(gObj->transform);
+		gObj->isLight = sr.setIsLight();
+		sr.setHitbox(&(gObj->hitboxes));
+		gObj->hitable = sr.setIsHitable();
+		gObj->damagable = sr.setIsDamagable();
+		scene.gameObjects.emplace_back(gObj);
+	}
+	//dirLight
+	auto dirLight = sr.readDirLight();
+	scene.dirLights.emplace_back(dirLight);
+	//    scene.dirLights.emplace_back(dirLight);
+	//pointLight
+	auto pointLight = sr.readPointLight();
+	scene.pointLights.emplace_back(pointLight);
+
+
+	// spot
+	auto spotLight = new Light::SpotLight{
+		glm::vec3(-5, 5, -5),
+		glm::vec3(1, -1, 1),
+		glm::cos(glm::radians(12.5f)),
+		glm::cos(glm::radians(17.5f)),
+		glm::vec3(0),
+		glm::vec3(0.8, 0.8, 0.8),
+		glm::vec3(1, 1, 1),
+		0, 0, 0
+	};
+	auto flashLight = new Light::SpotLight{
+		glm::vec3(-5, 5, -5),
+		glm::vec3(0.1, -1, 0.1),
+		glm::cos(glm::radians(12.5f)),
+		glm::cos(glm::radians(17.5f)),
+		glm::vec3(0),
+		glm::vec3(0.8, 0.8, 0.8),
+		glm::vec3(1, 1, 1),
+		0, 0, 0
+	};
+
+	scene.spotLights.emplace_back(spotLight);
+	scene.spotLights.emplace_back(flashLight);
+
+	scene.mainCamera->BindSpotLight(flashLight);
+
+
+
+	return scene;
 }

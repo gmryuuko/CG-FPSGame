@@ -76,8 +76,7 @@ void Camera::ProcessInput(glm::vec3 &position) {
     }
 
     // mouse
-    static double xpos = 0, ypos = 0, lastXpos = 0, lastYpos = 0;
-    static double sensitivity = 0.05;
+    static double lastXpos = 0, lastYpos = 0;
     static bool first = true;
     double deltaXpos, deltaYpos;
 

@@ -15,6 +15,10 @@ public:
     Transform* transform;
     float zoom = 45;
     bool camMoved;
+
+    double xpos = 0, ypos = 0;
+    double sensitivity = 0.05;
+
     Camera();
     glm::mat4 GetViewMatrix();
     void ProcessInput(glm::vec3& translate);

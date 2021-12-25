@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Light.h"
 #include "Hitbox.h"
+#include "Scene.h"
 #include <stdio.h>
 #include <vector>
 #include <map>
@@ -27,6 +28,8 @@ public:
 	Light::DirLight* readDirLight();
 	void setTransform(Transform* transform);
 	bool setIsLight();
+	bool setIsHitable();
+	bool setIsDamagable();
 	void setHitbox(std::vector<Hitbox*>* hitbox);
 private:
 	const char* filePath;
@@ -46,3 +49,5 @@ private:
 	void readVec3(float* x, float* y, float* z);
 	void initMap();
 };
+
+Scene& readFromXML(const char* path);
