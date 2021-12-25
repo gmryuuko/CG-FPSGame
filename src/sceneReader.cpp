@@ -95,6 +95,7 @@ GameObject* sceneReader::readGameObject() {
 	tmpCategory = object->Name();
 	element = object->FirstChildElement("model");
 	tmpModelPath = element->Attribute("path");
+	
 	//object = object->NextSiblingElement();
 	return new GameObject(Resource::GetModel(tmpModelPath));
 }
@@ -152,4 +153,27 @@ bool sceneReader::setIsLight() {
 	element = element->NextSiblingElement("light");
 	bool ret=element->BoolAttribute("isLight");
 	return ret;
+}
+
+void sceneReader::setHitbox(std::vector<Hitbox*>* hitbox) {
+	tinyxml2::XMLElement* hitbox_center = object->FirstChildElement("hitbox_center");
+	tinyxml2::XMLElement* hitbox_size = object->FirstChildElement("hitbox_size");
+	tinyxml2::XMLElement* temp = element; // 保存element指针
+	float x, y, z, a, b, c;
+	glm::vec3 center;
+	while (hitbox_center && hitbox_size) {
+		element = hitbox_center;
+		readVec3(&x, &y, &z);
+
+		element = hitbox_size;
+		readVec3(&a, &b, &c);
+		hitbox->push_back(new Hitbox(glm::vec3(x, y, z), a, b, c));
+
+		// 读取下一个
+		hitbox_center = hitbox_center->NextSiblingElement("hitbox_center");
+		hitbox_size = hitbox_size->NextSiblingElement("hitbox_size");
+	}
+	// 虽然不是必须的但是还是恢复一下之前的element指针
+	element = temp;
+
 }

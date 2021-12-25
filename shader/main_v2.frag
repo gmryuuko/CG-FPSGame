@@ -150,7 +150,7 @@ void main() {
 
     
     float brightness = dot(result, vec3(0.2126, 0.7152, 0.0722));
-    if (brightness > 1.2) {
+    if (brightness > 1) {
         BrightColor = vec4(result, 1.0);
     } else {
         BrightColor = vec4(0, 0, 0, 1);
@@ -186,11 +186,6 @@ Colors CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir,
     }
 
     // 衰减
-    float distance    = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
-    ambient  *= attenuation; 
-    diffuse  *= attenuation;
-    specular *= attenuation;   
 
     // mix
     return Colors(ambient, ambient + lighting * (diffuse + specular));
@@ -335,11 +330,11 @@ Colors CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, f
     specular *= intensity;
 
     // attenuation
-    float distance    = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
-    ambient  *= attenuation; 
-    diffuse  *= attenuation;
-    specular *= attenuation;   
+    // float distance    = length(light.position - FragPos);
+    // float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    // ambient  *= attenuation; 
+    // diffuse   *= attenuation;
+    // specular *= attenuation;   
 
     // mix
     return Colors(ambient, ambient + lighting * (diffuse + specular));

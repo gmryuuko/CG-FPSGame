@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "GameObject.h"
 #include "Light.h"
+#include "Hitbox.h"
 #include <stdio.h>
 #include <vector>
 #include <map>
@@ -26,6 +27,7 @@ public:
 	Light::DirLight* readDirLight();
 	void setTransform(Transform* transform);
 	bool setIsLight();
+	void setHitbox(std::vector<Hitbox*>* hitbox);
 private:
 	const char* filePath;
 	const char* query;

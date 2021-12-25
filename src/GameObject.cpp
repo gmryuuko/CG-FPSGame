@@ -33,8 +33,9 @@ void GameObject::Test() {
 }
 
 float GameObject::isHit(vec4 viewDir, vec4 viewPos) {
-	viewDir = inverse(this->transform->GetModelMatrix()) * viewDir;
-	viewPos = inverse(this->transform->GetModelMatrix()) * viewPos;
+	glm::mat4 inverseModelMatrix = this->transform->GetInverseModelMatrix();
+	viewDir = inverseModelMatrix * viewDir;
+	viewPos = inverseModelMatrix * viewPos;
 
 	divideByW(viewDir);
 	divideByW(viewPos);
@@ -50,4 +51,19 @@ float GameObject::isHit(vec4 viewDir, vec4 viewPos) {
 		}
 	}
 	return dist;
+}
+
+bool GameObject::isInside(vec4& modelPos) {
+	vec4 pos = this->transform->GetInverseModelMatrix() * modelPos;
+
+	divideByW(pos);
+	
+	for (auto iter : hitboxes) {
+		if (iter->isInside(pos)) {
+			modelPos = this->transform->GetModelMatrix() * pos;
+			divideByW(modelPos);
+			return true;
+		}
+	}
+	return false;
 }

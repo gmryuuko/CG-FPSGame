@@ -74,6 +74,18 @@ void sceneSaver::saveGameObject(GameObject* obj) {
 	model->SetAttribute("path", obj->modelPath.c_str());
 	object->InsertEndChild(model);
 	saveTransform(object, obj->transform->GetPosition(), obj->transform->GetRotation(), obj->transform->GetScale());
+	tinyxml2::XMLElement* hitbox_center = doc.NewElement("hitbox_center");
+	tinyxml2::XMLElement* hitbox_size = doc.NewElement("hitbox_size");
+	for (auto iter : obj->hitboxes) {
+		saveVec3(hitbox_center, iter->center);
+		saveVec3(hitbox_size, glm::vec3(iter->x, iter->y, iter->z));
+		object->InsertEndChild(hitbox_center);
+		object->InsertEndChild(hitbox_size);
+
+		// 构建一组新的hitbox条目，因为可能有多个hitbox
+		hitbox_center = doc.NewElement("hitbox_center");
+		hitbox_size = doc.NewElement("hitbox_size");
+	}
 	tinyxml2::XMLElement* light = doc.NewElement("light");
 	light->SetAttribute("isLight", obj->isLight);
 	object->InsertEndChild(light);

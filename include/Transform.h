@@ -25,6 +25,7 @@ private:
 	glm::mat4 rotationMatrix = glm::mat4(1);
 	glm::mat4 scaleMatrix = glm::mat4(1);
 	glm::mat4 modelMatrix = glm::mat4(1);
+	glm::mat4 inverseModelMatrix = glm::mat4(1);
 	// modelMatrix是否需要重新计算
 	bool dirty = true;
 	// 位移
@@ -77,7 +78,7 @@ public:
 	glm::mat4 GetTranslateMatrix();
 	glm::mat4 GetRotationMatrix();
 	glm::mat4 GetScaleMatrix();
-
+	glm::mat4 GetInverseModelMatrix();
 };
 
 #endif

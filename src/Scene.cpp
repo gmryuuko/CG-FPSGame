@@ -10,13 +10,37 @@ Scene::Scene() {
 }
 
 void Scene::ProcessInput() {
-	mainCamera->ProcessInput();
+    mat4 projection = glm::perspective(glm::radians(this->mainCamera->zoom), (float)Graphic::retWindowWidth() / (float)Graphic::retWindowHeight(), 0.1f, 100.0f);
+    mat4 view = this->mainCamera->GetViewMatrix();
+    mat4 invertedViewProjectionMatrix = glm::inverse(projection * view);
 
-    if (Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-        // ��⵽����
-        mat4 projection = glm::perspective(glm::radians(this->mainCamera->zoom), (float)Graphic::retWindowWidth()/ (float)Graphic::retWindowHeight(), 0.1f, 100.0f);
-        mat4 view = this->mainCamera->GetViewMatrix();
-        mat4 invertedViewProjectionMatrix = glm::inverse(projection * view);
+    glm::vec3 position, dir;
+    glm::vec4 modelPos;
+    
+	mainCamera->ProcessInput(position);
+   
+    // 视角碰撞检测
+    int flag = true; // translate是否合法
+    if (mainCamera->camMoved) {
+        modelPos = vec4(mainCamera->transform->GetPosition(), 1.0);
+     
+        for (auto iter : this->gameObjects) {
+            if (iter->isInside(modelPos)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag == false) {
+            mainCamera->transform->SetPosition(modelPos);
+            //cout << "Inside!\n";
+        }
+        mainCamera->camMoved = false;
+        
+    }
+    //std::cout << "The mat is:" << position.x << ", " << position.y << ", " << position.z << std::endl;
+
+    // Handling Mouse clicks
+    if (Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {    
         vec4 nearPoint = vec4(0, 0, -1, 1);
         vec4 farPoint = vec4(0, 0, 1, 1);
         nearPoint = invertedViewProjectionMatrix * nearPoint;
@@ -48,4 +72,10 @@ void Scene::ProcessInput() {
         else cout << "Miss!\n";
         hitObject = nullptr;
     }
+}
+
+
+
+bool Scene::canCameraMove() {
+    return true;
 }

@@ -8,6 +8,7 @@ using namespace glm;
 Camera::Camera() {
     this->transform = new Transform();
     light = nullptr;
+    camMoved = false;
 }
 
 mat4 Camera::GetViewMatrix() {
@@ -17,8 +18,8 @@ mat4 Camera::GetViewMatrix() {
     // return lookAt(vec3(0, 0, 6), vec3(0, 0, 0), vec3(0, 1, 0));
 }
 
-void Camera::ProcessInput() {
-
+void Camera::ProcessInput(glm::vec3 &position) {
+    
     // keyboard
     static float moveSpeed = 5.0f;
 
@@ -41,27 +42,36 @@ void Camera::ProcessInput() {
     vec3 direction = vec3(0, 0, 0);
 
     if (Input::GetKey(GLFW_KEY_W)) {
+        camMoved = true;
         direction += front;
     }
     if (Input::GetKey(GLFW_KEY_S)) {
+        camMoved = true;
         direction -= front;
     }
     if (Input::GetKey(GLFW_KEY_A)) {
+        camMoved = true;
         direction -= right;
     }
     if (Input::GetKey(GLFW_KEY_D)) {
+        camMoved = true;
         direction += right;
     }
     if (Input::GetKey(GLFW_KEY_R)) {
+        camMoved = true;
         direction += up;
     }
     if (Input::GetKey(GLFW_KEY_F)) {
+        camMoved = true;
         direction -= up;
     }
 
     // std::cout << glm::to_string(direction) << std::endl;
-
-    if (direction != vec3(0, 0, 0)) {
+    // 在实现位移之前，我们先存一下之前的translate的position，这样在scene里面如果判定碰撞则可以返回
+    
+    if (camMoved && direction != vec3(0, 0, 0)) {
+        position = transform->GetPosition();
+        
         transform->Translate(direction, moveSpeed * FrameTime::GetDeltaTime());
     }
 
@@ -107,4 +117,11 @@ void Camera::SetTransform(const Transform& transform) {
 
 void Camera::BindSpotLight(Light::SpotLight* light) {
     this->light = light;
+}
+void Camera::SetPosition(const glm::vec3& position, const glm::vec3& dir) {
+    this->transform->SetPosition(position);
+    //this->transform->Translate(dir, -0.01);
+    if (light != nullptr) {
+        light->position = position;
+    }
 }

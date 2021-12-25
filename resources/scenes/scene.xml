@@ -27,9 +27,11 @@
             </list>
             <nanosuit name="nanosuit1">
                 <model path="nanosuit/nanosuit.obj"/>
-                <position x="4.1500001" y="0.55000001" z="5"/>
+                <position x="4.75" y="0" z="5"/>
                 <rotation x="0" y="-89.400002" z="0"/>
                 <scale x="0.1" y="0.1" z="0.1"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="1" y="1" z="1"/>
                 <light isLight="false"/>
             </nanosuit>
             <earth name="earth1">
@@ -62,9 +64,11 @@
             </cottage>
             <cube name="cube1">
                 <model path="brick/cube.obj"/>
-                <position x="0" y="0" z="3"/>
+                <position x="2.4000001" y="1.15" z="3"/>
                 <rotation x="0" y="0" z="0"/>
                 <scale x="1" y="1" z="1"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="2" y="2" z="2"/>
                 <light isLight="false"/>
             </cube>
             <ground name="ground1">
@@ -79,6 +83,8 @@
                 <position x="5" y="3.8499999" z="5"/>
                 <rotation x="0" y="0" z="0"/>
                 <scale x="1" y="1" z="1"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="2" y="2" z="2"/>
                 <light isLight="true"/>
             </lightCube>
             <container name="container1">
@@ -90,7 +96,7 @@
             </container>
             <tower name="tower1">
                 <model path="watch_tower/wooden_watch_tower2.obj"/>
-                <position x="0" y="0" z="0"/>
+                <position x="-5.1500001" y="-0.75" z="-6.1999998"/>
                 <rotation x="0" y="0" z="0"/>
                 <scale x="1" y="1" z="1"/>
                 <light isLight="false"/>

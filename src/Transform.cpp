@@ -32,6 +32,8 @@ void Transform::UpdateModelMatrix() {
 	scaleMatrix = glm::scale(mat4(1), scale);
 	// model matrix，缩放->旋转->位移
 	modelMatrix = translateMatrix * rotationMatrix * scaleMatrix * mat4(1);
+	// inverse model matrix
+	inverseModelMatrix = glm::inverse(modelMatrix);
 	// local 坐标轴
 	axisX = rotationMatrix * vec4(1, 0, 0, 0);
 	axisY = rotationMatrix * vec4(0, 1, 0, 0);
@@ -77,6 +79,10 @@ mat4 Transform::GetRotationMatrix() {
 mat4 Transform::GetScaleMatrix() {
 	CheckDirty();
 	return scaleMatrix;
+}
+glm::mat4 Transform::GetInverseModelMatrix() {
+	CheckDirty();
+	return inverseModelMatrix;
 }
 
 void Transform::SetPosition(const vec3& position) {
