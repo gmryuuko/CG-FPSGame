@@ -42,7 +42,7 @@ const std::string UNIFORM_NORMAL_TEX = "texNormal";
 bool InputBlocked();
 
 // 创建窗口
-GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight);
+GLFWwindow* gCreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight);
 
 /*
     设置Cursor模式

@@ -17,4 +17,4 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/include/imgui-1.85 IMGUI_SRC)
 
 
 add_executable(fps ${SOURCE} ${IMGUI_SRC})
-target_link_libraries(fps glfw3.lib)
+target_link_libraries(fps glfw3.lib winmm.lib)

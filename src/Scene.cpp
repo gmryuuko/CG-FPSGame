@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Graphic.h"
 #include "Hitbox.h"
+#include "Audio.h"
 
 using namespace std;
 using namespace glm;
@@ -45,6 +46,10 @@ void Scene::ProcessInput() {
 
     // Handling Mouse clicks
     if (Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {  
+        if (mainCamera->currentGun == mainCamera->primary)
+            Audio::Shoot(1);
+        else Audio::Shoot(2);
+        
         mainCamera->currentGun->fires();
         mainCamera->rotation = mainCamera->rotationWithRecoil;
         vec4 nearPoint = vec4(0, 0, -1, 1);

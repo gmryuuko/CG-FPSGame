@@ -23,9 +23,8 @@ using namespace std;
 
 int main() {
 
-    GLFWwindow* window = Graphic::CreateWindow("FPS", 1920, 1080);
+    GLFWwindow* window = Graphic::gCreateWindow("FPS", 1920, 1080);
     Gui::InitGui(window);
-    // GLFWwindow* window = Graphic::CreateWindow("FPS", 800, 600);
 
     if (window == nullptr) {
         cout << "Create window failed!" << endl;

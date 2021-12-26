@@ -100,7 +100,7 @@ bool InputBlocked() {
     return blockInput;
 }
 
-GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight) {
+GLFWwindow* gCreateWindow(const std::string& title, unsigned int scrWidth, unsigned int scrHeight) {
     
     Graphic::scrWidth = scrWidth;
     Graphic::scrHeight = scrHeight;
