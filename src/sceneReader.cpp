@@ -58,7 +58,7 @@ void sceneReader::readCamera(Camera* camera) {
     camera->transform->SetPosition(glm::vec3(x,y,z));
 	element = cameraReader->FirstChildElement("rotation");
 	readVec3(&x, &y, &z);
-	camera->transform->SetRotation(glm::vec3(x,y,z));
+	camera->rotation = (glm::vec3(x,y,z));
 	element = cameraReader->FirstChildElement("scale");
 	readVec3(&x, &y, &z);
 	camera->transform->SetScale(glm::vec3(x,y,z));

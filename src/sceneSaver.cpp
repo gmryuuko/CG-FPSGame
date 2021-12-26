@@ -43,7 +43,7 @@ void sceneSaver::saveTransform(tinyxml2::XMLElement* element,glm::vec3 p,glm::ve
 }
 
 void sceneSaver::saveCamera() {
-	saveTransform(camera,glm::vec3(0.0,2.0,5.0),glm::vec3(0.0,0.0,0.0), glm::vec3(0.0, 0.0, 0.0));
+	saveTransform(camera,glm::vec3(0.0,0.5,5.0),glm::vec3(0.0,0.0,0.0), glm::vec3(0.0, 0.0, 0.0));
 }
 
 void sceneSaver::saveSkyBox() {

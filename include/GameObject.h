@@ -38,6 +38,8 @@ public:
 	void Test();
 	float isHit(vec4 viewDir, vec4 viewPos);
 	bool isInside(vec4& modelPos);
+	bool isHitable();
+	bool isDamagable();
 };
 
 #endif // !GAMEOBJECT_H

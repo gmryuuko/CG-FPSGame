@@ -9,6 +9,10 @@ Camera::Camera() {
     this->transform = new Transform();
     light = nullptr;
     camMoved = false;
+    primary = new MK14();
+    secondary = new P1911();
+    currentGun = primary;
+    rotation = glm::vec3(0);
 }
 
 mat4 Camera::GetViewMatrix() {
@@ -65,6 +69,12 @@ void Camera::ProcessInput(glm::vec3 &position) {
         camMoved = true;
         direction -= up;
     }
+    if (Input::GetKey(GLFW_KEY_1)) {
+        currentGun = primary;
+    }
+    if (Input::GetKey(GLFW_KEY_2)) {
+        currentGun = secondary;
+    }
 
     // std::cout << glm::to_string(direction) << std::endl;
     // 在实现位移之前，我们先存一下之前的translate的position，这样在scene里面如果判定碰撞则可以返回
@@ -96,11 +106,26 @@ void Camera::ProcessInput(glm::vec3 &position) {
     
     deltaXpos = deltaXpos * sensitivity;
     deltaYpos = deltaYpos * sensitivity;
-    
+
     // 鼠标左右移动是xpos，改变yaw角
     // 鼠标上下移动是ypos，改变pitch角
-    transform->RotateY(-deltaXpos);
-    transform->RotateX(-deltaYpos, true);
+    rotation.y -= deltaXpos;
+    rotation.x -= deltaYpos;
+
+    if (rotation.x > 89)
+        rotation.x = 89;
+    if (rotation.x < -89)
+        rotation.x = -89;
+
+    rotationWithRecoil = rotation;
+    rotationWithRecoil.x += currentGun->gunRecoil();
+ 
+    if (rotationWithRecoil.x > 89)
+        rotationWithRecoil.x = 89;
+    if (rotationWithRecoil.x < -89)
+        rotationWithRecoil.x = -89;
+ 
+    transform->SetRotation(rotationWithRecoil);
 
 
     // 移动绑定的聚光灯

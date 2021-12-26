@@ -54,7 +54,7 @@ float GameObject::isHit(vec4 viewDir, vec4 viewPos) {
 			dist = temp;
 		}
 	}
-	return dist;
+	return dist*this->transform->GetScale().x;
 }
 
 bool GameObject::isInside(vec4& modelPos) {
@@ -71,4 +71,12 @@ bool GameObject::isInside(vec4& modelPos) {
 		}
 	}
 	return false;
+}
+
+
+bool GameObject::isHitable() {
+	return hitable && HP > 0;
+}
+bool GameObject::isDamagable() {
+	return hitable && damagable && HP > 0;
 }

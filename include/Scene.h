@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Skybox.h"
-#include "MK14.h"
+#include "LittleGun.h"
 
 class Scene {
 public:
@@ -18,11 +18,15 @@ public:
 	std::vector<Light::PointLight*> pointLights;
 	std::vector<Light::DirLight*> dirLights;
 	std::vector<Light::SpotLight*> spotLights;
-	Gun* gun;
 	Scene();
 	virtual void ProcessInput();
 private:
 	bool canCameraMove();
+	void enemyActions();
+	void breathRecover();
+	int playerHP;
+	float playerLastHit;
+	LittleGun* littleGun;
 };
 
 #endif // !SCENE_H
