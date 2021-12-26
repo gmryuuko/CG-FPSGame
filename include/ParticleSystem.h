@@ -9,11 +9,11 @@
 #define LAUNCHER 0.0f
 #define BULLET 1.0f
 
-#define MAX_VELOCITY glm::vec3(0.0,5.0,0.0)
-#define MIN_VELOCITY glm::vec3(0.0,2.0,0.0)
+#define MAX_VELOCITY glm::vec3(0.0,1.5,0.0)
+#define MIN_VELOCITY glm::vec3(0.0,0.2,0.0)
 #define MAX_AGE 2.0f*1000
 #define MIN_AGE 1.0f*1000  
-#define PARTICLE_SIZE 10.0f;
+#define PARTICLE_SIZE 0.5;
 
 const int MAX_PARTICLES = 10000;
 

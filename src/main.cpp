@@ -40,7 +40,7 @@ int main() {
     Graphic::SetCursorMode(GLFW_CURSOR_DISABLED);
 
 
-    ParticleSystem flame(3000);
+    ParticleSystem flame(5000);
     Scene& scene = readFromXML("../resources/scenes/scene.xml");
     scene.flame = &flame;
     scene.flameTransfrom = new Transform();

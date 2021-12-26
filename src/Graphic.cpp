@@ -721,7 +721,6 @@ void RenderScene(Scene& scene) {
         skyboxShader->SetMat4(UNIFORM_PROJECTION_MATRIX, projection);
         scene.skybox->Draw(*skyboxShader);
     }
-
     scene.flame->render(FrameTime::GetDeltaTime(), 
         scene.flameTransfrom->GetModelMatrix(), 
         scene.mainCamera->GetViewMatrix(), projection);

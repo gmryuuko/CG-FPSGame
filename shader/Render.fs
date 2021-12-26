@@ -3,8 +3,8 @@
 in float alpha;
 in float age;
 in float lifeSpan;
-uniform sampler2D flameSpark;
-uniform sampler2D flameStart;
+uniform sampler2D spark;
+uniform sampler2D launcher;
 
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
@@ -16,14 +16,13 @@ void main()
 {
     vec4 texColor;
     if((age/lifeSpan) > 0.4)
-        texColor = texture(flameSpark,gl_PointCoord);
+        texColor = texture(spark,gl_PointCoord);
     else 
-        texColor = texture(flameStart,gl_PointCoord);
-    //if(texColor.r < 0.1f)discard;
+        texColor = texture(launcher,gl_PointCoord);
 	texColor.a = texColor.r;
 
-    FragColor = vec4(0.5f,0.3,0.1,alpha)*texColor;
-    BrightColor = vec4(0.5f,0.3,0.1,alpha)*texColor*4;
+    FragColor = vec4(1.0f,0.3,0.1,alpha)*texColor;
+    BrightColor = vec4(1.0f,0.3,0.1,alpha)*texColor;
     ViewPosition = vec4(0);
     NormalOut = vec4(0);
     AmbientOut = vec4(0);

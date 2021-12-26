@@ -124,9 +124,11 @@ void ParticleSystem::updateParticles(float dt)
 void ParticleSystem::renderParticles(glm::mat4& worldMatrix,
 	glm::mat4& viewMatrix, glm::mat4& projectMatrix)
 {
+	//glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 	renderShader->Use();
 	renderShader->SetMat4("model", worldMatrix);
@@ -155,8 +157,10 @@ void ParticleSystem::renderParticles(glm::mat4& worldMatrix,
 	glDisableVertexAttribArray(3);
 	glDisableVertexAttribArray(4);
 
+	//glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_PROGRAM_POINT_SIZE);
+	glDepthMask(GL_TRUE);
 }
 
 
@@ -164,7 +168,7 @@ void ParticleSystem::initLocation(particle particles[], int nums)
 {
 	srand(time(NULL));
 	int n = 10;
-	float radius = 0.7f;
+	float radius = 0.2f;
 	for (int x = 0; x < nums; x++) {
 		glm::vec3 record(0.0f);
 		for (int y = 0; y < n; y++) {

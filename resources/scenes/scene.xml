@@ -33,7 +33,7 @@
             </list>
             <camp name="camp1">
                 <model path="camp/Campfire.obj"/>
-                <position x="7.25" y="0" z="-7.5999999"/>
+                <position x="7.27" y="0" z="-7.65"/>
                 <rotation x="0" y="-100.8" z="0"/>
                 <scale x="0.029999999" y="0.029999999" z="0.029999999"/>
                 <light isLight="false"/>
