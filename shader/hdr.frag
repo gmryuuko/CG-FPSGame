@@ -11,6 +11,11 @@ uniform bool ssaoOn;
 uniform bool hdrOn;
 uniform bool bloomOn;
 uniform float exposure;
+uniform float HP;
+
+bool inRange(float x, float mn, float mx) {
+    return mn <= x && x <= mx;
+}
 
 void main() {
     // HUD
@@ -64,4 +69,31 @@ void main() {
         result = pow(hdrColor, vec3(1.0 / gamma));
         FragColor = vec4(result, 1.0);
     }
+
+    // x = [-700, -500]
+    // y = [-400, -300]
+    float x1 = -700, x2 = -500, y1 = -400, y2 = -360, hp = HP;
+    if (hp > 1) hp = 1;
+    if (hp < 0) hp = 0;
+    // 左边框
+    if (inRange(pos.x, x1 - 2, x1) && inRange(pos.y, y1 - 2, y2 + 2)) {
+        FragColor = vec4(0, 0.8, 0, 1);
+    }
+    // right 边框
+    if (inRange(pos.x, x2, x2 + 2) && inRange(pos.y, y1 - 2, y2 + 2)) {
+        FragColor = vec4(0, 0.8, 0, 1);
+    }
+    // up
+    if (inRange(pos.x, x1 - 2, x2 + 2) && inRange(pos.y, y2, y2 + 2)) {
+        FragColor = vec4(0, 0.8, 0, 1);
+    }
+    // down
+    if (inRange(pos.x, x1 - 2, x2 + 2) && inRange(pos.y, y1 - 2, y1)) {
+        FragColor = vec4(0, 0.8, 0, 1);
+    }
+    // hp
+    if (inRange(pos.y, y1, y2) && inRange(pos.x, x1, x1 + (x2 - x1) * hp)) {
+        FragColor = vec4(0, 0.8, 0, 1);
+    }
+
 }

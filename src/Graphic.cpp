@@ -631,6 +631,8 @@ void RenderScene(Scene& scene) {
         std::cerr << "No camera." << std::endl;
         return;
     }
+    // Set player hp
+    hdrShader->SetFloat("HP", scene.GetPlayerHP() / 100.0);
 
     // shadow
     // 必须要有一个dirLight

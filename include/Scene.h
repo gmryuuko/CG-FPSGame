@@ -20,6 +20,7 @@ public:
 	std::vector<Light::SpotLight*> spotLights;
 	Scene();
 	virtual void ProcessInput();
+	int GetPlayerHP() const;
 private:
 	bool canCameraMove();
 	void enemyActions();

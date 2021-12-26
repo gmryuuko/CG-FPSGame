@@ -157,3 +157,5 @@ void Scene::breathRecover() {
     if (this->playerHP > 100) this->playerHP = 100;
     cout << "Player HP: " << playerHP << endl;
 }
+
+int Scene::GetPlayerHP() const { return playerHP; }
