@@ -19,8 +19,8 @@
 
 namespace ObjLoader {
 
-Model* LoadModel(const std::string& path);
-//void CalcTBN(Vertex& a, Vertex& b, Vertex& c);
+    Model* LoadModel(const std::string& path);
+    bool WriteModel(const Model& model);
 
 }
 

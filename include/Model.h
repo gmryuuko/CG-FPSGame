@@ -15,6 +15,7 @@ private:
 public:
     Model(std::vector<Mesh* >* meshes, const std::string& path = "");
     void Draw(const Shader& shader);
+    std::vector<Mesh*>* GetMeshes() const;
 };
 
 #endif // MODEL_H

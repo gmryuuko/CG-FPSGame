@@ -13,6 +13,28 @@ uniform bool bloomOn;
 uniform float exposure;
 
 void main() {
+    // HUD
+    vec2 pos = TexCoords;
+    pos = pos - vec2(0.5, 0.5);
+    pos.x *= 1600;
+    pos.y *= 900;
+    // 圆形准星
+    // float r2 = pos.x * pos.x + pos.y * pos.y;
+    // if (r2 <= 4 || (20 * 20 <= r2 && r2 <= 22 * 22)) {
+    //     FragColor = vec4(0, 0.9, 0, 1);
+    //     return;
+    // }
+    // 十字准星
+    float siz = 15, dis = 10;
+    if ((dis <= abs(pos.x) && abs(pos.x) <= dis + siz) && (abs(pos.y) <= 2)) {
+        FragColor = vec4(0, 0.9, 0, 1);
+        return;
+    }
+    if ((dis <= abs(pos.y) && abs(pos.y) <= dis + siz) && (abs(pos.x) <= 1.5)) {
+        FragColor = vec4(0, 0.9, 0, 1);
+        return;
+    }
+
     // FragColor = texture(ambientBuffer, TexCoords);
     // return;
     const float gamma = 1.2;

@@ -18,14 +18,14 @@ class Mesh
 {
 private:
 	unsigned int vao = 0, vbo = 0, ebo = 0;
-
-	std::vector<Vertex>* vertices;
-	std::vector<unsigned int>* indices;
 	// 是否调用Init()初始化了？
 	bool ready = false;
 	void Init();
 
-public:
+public:	
+	std::vector<Vertex>* vertices;
+	std::vector<unsigned int>* indices;
+
 	~Mesh();
 	Mesh();
 	Mesh(std::vector<Vertex>* vertices, std::vector<unsigned int>* indices);

@@ -12,3 +12,7 @@ void Model::Draw(const Shader& shader) {
         mesh->Draw(shader);
     }
 }
+
+std::vector<Mesh*>* Model::GetMeshes() const {
+    return meshes;
+}

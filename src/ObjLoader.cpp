@@ -1,6 +1,7 @@
 #include "ObjLoader.h"
 #include "Resource.h"
 
+#include <iomanip>
 #include <unordered_map>
 
 using namespace std;
@@ -345,8 +346,35 @@ namespace ObjLoader {
 		return &mtls;
 	}
 
-	void WriteModel(const Model& model) {
-		// TODO
+	bool WriteModel(const Model& model) {
+		ofstream fout;
+		fout.open("../export.obj", ios::out);
+		if (!fout.is_open()) {
+			return false;
+		}
+
+		int offst = 1;
+		for (auto m : *(model.GetMeshes())) {
+			cout << "mesh.vertices.size() = " << m->vertices->size() << endl;
+			cout << "mesh.indices.size()  = " << m->indices->size() << endl;
+			fout << "o model" << offst << endl;
+			for (auto v : *(m->vertices)) {
+				fout << "v " << fixed << setprecision(8) << v.position.x << ' '<< v.position.y << ' ' << v.position.z << endl;
+			}
+			for (auto v : *(m->vertices)) {
+				fout << "vn " << fixed << setprecision(8) << v.normal.x << ' '<< v.normal.y << ' ' << v.normal.z << endl;
+			}
+			for (auto v : *(m->vertices)) {
+				fout << "vt " << fixed << setprecision(8) << v.texCoord.x << ' ' << v.texCoord.y << endl;
+			}
+
+			for (int i = 0; i < m->indices->size(); i += 3) {
+				fout << "f " << m->indices->at(i) + offst << ' ' << m->indices->at(i + 1) + offst << ' ' << m->indices->at(i + 2) + offst << endl;
+			}
+
+			offst += m->vertices->size();
+		}
+		return true;
 	}
 
 }  // namespace ObjLoader
