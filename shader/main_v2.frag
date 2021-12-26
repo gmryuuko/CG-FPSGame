@@ -65,6 +65,7 @@ uniform sampler2D secDepthMap2;
 uniform vec3 viewPos;
 
 uniform bool normalOn;
+uniform bool flashLightOn;
 
 // input
 in Vsout {
@@ -127,20 +128,22 @@ void main() {
     colors = CalcDirLight(dirLights[0], normal, viewDir, lighting);
     result += colors.color;
     ambientResult += colors.ambient;
-    for (int i = 0; i < nPointLights; i++) {
-        colors = CalcPointLight(pointLights[i], normal, vsout.fragPos, viewDir, 1);
-        result += colors.color;
-        ambientResult += colors.ambient;
-    }
     for (int i = 1; i < nDirLights; i++) {
         colors = CalcDirLight(dirLights[i], normal, viewDir, 1);
         result += colors.color;
         ambientResult += colors.ambient;
     }
-    if (nSpotLights > 0) {
-        colors = CalcSpotLight(spotLights[0], normal, vsout.fragPos, viewDir, spotLighting);
+    for (int i = 0; i < nPointLights; i++) {
+        colors = CalcPointLight(pointLights[i], normal, vsout.fragPos, viewDir, 1);
         result += colors.color;
         ambientResult += colors.ambient;
+    }
+    if (nSpotLights > 0) {
+        if (flashLightOn) {
+            colors = CalcSpotLight(spotLights[0], normal, vsout.fragPos, viewDir, spotLighting);
+            result += colors.color;
+            ambientResult += colors.ambient;
+        }
     }
     for (int i = 1; i < nSpotLights; i++) {
         colors = CalcSpotLight(spotLights[i], normal, vsout.fragPos, viewDir, 1);
@@ -157,7 +160,7 @@ void main() {
     }
 
     FragColor = vec4(result, 1.0);
-    ViewPosition = vec4(vsout.viewFragPos, 0);
+    ViewPosition = vec4(vsout.viewFragPos, 1);
     NormalOut = vec4(normalize(mat3(vsout.view) * normal), 1.0);
     AmbientOut = vec4(ambientResult, 1);
 }

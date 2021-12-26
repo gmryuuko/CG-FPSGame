@@ -19,7 +19,7 @@ layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
 void main() {
-    vec3 result = useTexDiff ? vec3(texture(texDiffuse, texCoords)) : colorDiffuse;
+    vec3 result = useTexDiff ? (5.0 * vec3(texture(texDiffuse, texCoords))) : colorDiffuse;
 
     float brightness = dot(result, vec3(0.2126, 0.7152, 0.0722));
     if (brightness > 1) {

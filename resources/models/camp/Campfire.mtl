@@ -1,0 +1,49 @@
+newmtl Campfire_Maya_2016:phongE3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Textures/camp_diffuse.jpg
+norm Textures/camp_normal.jpg
+Ni 1.00
+Ks 0.12 0.12 0.12
+
+newmtl phongE1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Textures/rocks_diffuse.jpg
+norm Textures/rocks_normal.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks Textures/rocks_specular.jpg
+
+newmtl phongE3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Textures/woodsground_diffuse.jpg
+norm Textures/woodsground_normal.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks Textures/woodsground_specular.jpg
+
+newmtl phongE4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Textures/utensilrope_diffuse.jpg
+norm Textures/utensilrope_normal.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks Textures/utensilrope_specular.jpg
+
+newmtl useBackground1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00

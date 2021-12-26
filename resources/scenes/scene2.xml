@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <scene>
+        <camera>
+            <position x="0" y="0.5" z="5"/>
+            <rotation x="0" y="0" z="0"/>
+            <scale x="0" y="0" z="0"/>
+        </camera>
+        <skyBox>
+            <px path="cubemap/universe/1k_px.jpg"/>
+            <nx path="cubemap/universe/1k_nx.jpg"/>
+            <py path="cubemap/universe/1k_py.jpg"/>
+            <ny path="cubemap/universe/1k_ny.jpg"/>
+            <pz path="cubemap/universe/1k_pz.jpg"/>
+            <nz path="cubemap/universe/1k_nz.jpg"/>
+        </skyBox>
+        <gameObject>
+            <list totalNum="18">
+                <container num="5"/>
+                <cottage num="1"/>
+                <cube num="1"/>
+                <earth num="3"/>
+                <ground num="1"/>
+                <lightCube num="1"/>
+                <nanosuit num="5"/>
+                <tower num="1"/>
+                <mountain num="1"/>
+            </list>
+            <mountain name="mountain1">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="0" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="true"/>
+            </mountain>
+            <nanosuit name="nanosuit1">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="2.05" y="0" z="9.5"/>
+                <rotation x="0" y="149.8" z="0"/>
+                <scale x="0.029999999" y="0.029999999" z="0.029999999"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="50" y="100" z="25"/>
+                <light isLight="false"/>
+                <hitable/>
+                <damagable/>
+            </nanosuit>
+            <nanosuit name="nanosuit2">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="-1.75" y="-0.050000001" z="1.8"/>
+                <rotation x="0" y="-28.799999" z="0"/>
+                <scale x="0.050000001" y="0.050000001" z="0.050000001"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="50" y="100" z="25"/>
+                <light isLight="false"/>
+                <hitable/>
+                <damagable/>
+            </nanosuit>
+            <nanosuit name="nanosuit3">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="4.5500002" y="0" z="2.5999999"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="0.039999999" y="0.039999999" z="0.039999999"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="50" y="100" z="25"/>
+                <light isLight="false"/>
+                <hitable/>
+                <damagable/>
+            </nanosuit>
+            <nanosuit name="nanosuit4">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="-5.1999998" y="5.8499999" z="-5.6500001"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="0.07" y="0.07" z="0.07"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="50" y="100" z="25"/>
+                <light isLight="false"/>
+                <hitable/>
+                <damagable/>
+            </nanosuit>
+            <nanosuit name="nanosuit5">
+                <model path="nanosuit/nanosuit.obj"/>
+                <position x="-3.95" y="0" z="0.30000001"/>
+                <rotation x="0" y="240" z="0"/>
+                <scale x="0.039999999" y="0.039999999" z="0.039999999"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="50" y="100" z="25"/>
+                <light isLight="false"/>
+                <hitable/>
+                <damagable/>
+            </nanosuit>
+            <earth name="earth1">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="-2.05" y="3.6500001" z="0.2"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <earth name="earth2">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="7.1500001" y="4" z="1"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <earth name="earth3">
+                <model path="earth/Earth 2K.obj"/>
+                <position x="0" y="4" z="2"/>
+                <rotation x="90" y="0" z="0"/>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <light isLight="false"/>
+            </earth>
+            <cottage name="cottage1">
+                <model path="cottage/cottage_obj.obj"/>
+                <position x="0" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="0.17" y="0.17" z="0.17"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="33" y="18.5" z="18"/>
+                <light isLight="false"/>
+                <hitable/>
+            </cottage>
+            <cube name="cube1">
+                <model path="brick/cube.obj"/>
+                <position x="2.4000001" y="0.60000002" z="3"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="2" y="2" z="2"/>
+                <light isLight="false"/>
+                <hitable/>
+            </cube>
+            <ground name="ground1">
+                <model path="cobble/cobble_ground.obj"/>
+                <position x="0" y="0.0099999998" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <hitbox_center x="0" y="-0.5" z="0"/>
+                <hitbox_size x="20" y="0.5" z="20"/>
+                <light isLight="false"/>
+            </ground>
+            <lightCube name="lightCube1">
+                <model path="cube/light_cube.obj"/>
+                <position x="5" y="10.5" z="5"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="2" y="2" z="2"/>
+                <light isLight="true"/>
+                <hitable/>
+            </lightCube>
+            <container name="container1">
+                <model path="container/Container.obj"/>
+                <position x="-7.8000002" y="-0.050000001" z="-0.34999999"/>
+                <rotation x="0.60000002" y="156.2" z="0.40000001"/>
+                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="360" y="400" z="1000"/>
+                <light isLight="false"/>
+                <hitable/>
+            </container>
+            <container name="container2">
+                <model path="container/Container.obj"/>
+                <position x="-1.25" y="-0.050000001" z="6.5999999"/>
+                <rotation x="0" y="40.799999" z="0"/>
+                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="360" y="400" z="1000"/>
+                <light isLight="false"/>
+                <hitable/>
+            </container>
+            <container name="container3">
+                <model path="container/Container.obj"/>
+                <position x="5.3499999" y="0.1" z="6.4000001"/>
+                <rotation x="0" y="-66.599998" z="0"/>
+                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="360" y="400" z="1000"/>
+                <light isLight="false"/>
+                <hitable/>
+            </container>
+            <container name="container4">
+                <model path="container/Container.obj"/>
+                <position x="3.95" y="-0.2" z="-3.2"/>
+                <rotation x="0" y="21" z="0"/>
+                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="360" y="400" z="1000"/>
+                <light isLight="false"/>
+                <hitable/>
+            </container>
+            <container name="container5">
+                <model path="container/Container.obj"/>
+                <position x="-5.3000002" y="-0.1" z="8.3500004"/>
+                <rotation x="92.599998" y="86.400002" z="91.599998"/>
+                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <hitbox_center x="0" y="0" z="0"/>
+                <hitbox_size x="360" y="400" z="1000"/>
+                <light isLight="false"/>
+                <hitable/>
+            </container>
+            <tower name="tower1">
+                <model path="watch_tower/wooden_watch_tower2.obj"/>
+                <position x="-5.1500001" y="-0.75" z="-6.1999998"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="false"/>
+            </tower>
+        </gameObject>
+        <pointLight>
+            <position x="5" y="5" z="5"/>
+            <ambient x="0.2" y="0.2" z="0.2"/>
+            <diffuse x="0.80000001" y="0.80000001" z="0.80000001"/>
+            <specular x="1" y="1" z="1"/>
+            <constant value="1"/>
+            <linear value="0.014"/>
+            <quadratic value="0.0070000002"/>
+        </pointLight>
+        <dirLight>
+            <position x="10" y="10" z="10"/>
+            <direction x="-1" y="-1" z="-1"/>
+            <ambient x="0.1" y="0.1" z="0.1"/>
+            <diffuse x="0.80000001" y="0.69999999" z="0.60000002"/>
+            <specular x="1" y="1" z="1"/>
+        </dirLight>
+    </scene>
+</root>

@@ -170,7 +170,7 @@ bool sceneReader::setIsDamagable() {
 void sceneReader::setHitbox(std::vector<Hitbox*>* hitbox) {
 	tinyxml2::XMLElement* hitbox_center = object->FirstChildElement("hitbox_center");
 	tinyxml2::XMLElement* hitbox_size = object->FirstChildElement("hitbox_size");
-	tinyxml2::XMLElement* temp = element; // ±£´æelementÖ¸Õë
+	tinyxml2::XMLElement* temp = element; // ï¿½ï¿½ï¿½ï¿½elementÖ¸ï¿½ï¿½
 	float x, y, z, a, b, c;
 	glm::vec3 center;
 	while (hitbox_center && hitbox_size) {
@@ -181,11 +181,11 @@ void sceneReader::setHitbox(std::vector<Hitbox*>* hitbox) {
 		readVec3(&a, &b, &c);
 		hitbox->push_back(new Hitbox(glm::vec3(x, y, z), a, b, c));
 
-		// ¶ÁÈ¡ÏÂÒ»¸ö
+		// ï¿½ï¿½È¡ï¿½ï¿½Ò»ï¿½ï¿½
 		hitbox_center = hitbox_center->NextSiblingElement("hitbox_center");
 		hitbox_size = hitbox_size->NextSiblingElement("hitbox_size");
 	}
-	// ËäÈ»²»ÊÇ±ØÐëµÄµ«ÊÇ»¹ÊÇ»Ö¸´Ò»ÏÂÖ®Ç°µÄelementÖ¸Õë
+	// ï¿½ï¿½È»ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½Äµï¿½ï¿½Ç»ï¿½ï¿½Ç»Ö¸ï¿½Ò»ï¿½ï¿½Ö®Ç°ï¿½ï¿½elementÖ¸ï¿½ï¿½
 	element = temp;
 
 }
@@ -243,8 +243,8 @@ Scene& readFromXML(const char* path) {
 		glm::cos(glm::radians(12.5f)),
 		glm::cos(glm::radians(17.5f)),
 		glm::vec3(0),
-		glm::vec3(0.8, 0.8, 0.8),
-		glm::vec3(1, 1, 1),
+		glm::vec3(0.7, 0.7, 0.7),
+		glm::vec3(0.8),
 		1, 0.09, 0.032
 	};
 

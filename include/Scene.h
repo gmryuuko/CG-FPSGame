@@ -9,9 +9,12 @@
 #include "Light.h"
 #include "Skybox.h"
 #include "LittleGun.h"
+#include "ParticleSystem.h"
 
 class Scene {
 public:
+	ParticleSystem* flame = nullptr;
+	Transform* flameTransfrom;
 	Camera* mainCamera = nullptr;
 	Skybox* skybox = nullptr;
 	std::vector<GameObject*> gameObjects;

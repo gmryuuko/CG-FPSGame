@@ -18,6 +18,7 @@ private:
 
 public:
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
+	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath, const GLchar* varyings[], int count);
     ~Shader();
     void Use() const;
     void SetBool(const std::string& name, bool value) const;

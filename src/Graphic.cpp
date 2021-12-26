@@ -106,8 +106,8 @@ GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsign
     Graphic::scrHeight = scrHeight;
 
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
@@ -139,6 +139,9 @@ GLFWwindow* CreateWindow(const std::string& title, unsigned int scrWidth, unsign
     glEnable(GL_CULL_FACE);
     // v sync
     glfwSwapInterval(1);
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
     // Init Input
     Input::SetWindow(window);
@@ -266,8 +269,10 @@ void InitShadowMapping() {
             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     }
     for (int i = 0; i < 2; i++) {
         glBindTexture(GL_TEXTURE_2D, depthMap2[i]);
@@ -275,8 +280,10 @@ void InitShadowMapping() {
             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     }
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
@@ -514,9 +521,9 @@ mat4 RenderSpotLightShadow(Scene& scene, Light::SpotLight& light) {
     mat4 lightProjection, lightView, lightSpaceMatrix;
     float nearPlane = 0.1, farPlane = 100;
     // spot light使用透视投影矩阵
-    lightProjection = perspective(glm::radians(scene.mainCamera->zoom), (float)scrWidth / (float)scrHeight, 0.1f, 100.0f);
+    lightProjection = perspective(glm::radians(60.0f), (float)scrWidth / (float)scrHeight, 0.1f, 100.0f);
     // View矩阵
-    lightView = lookAt(light.position, light.position + light.direction, vec3(0, 1, 0));
+    lightView = lookAt(light.position + glm::vec3(0, -0.2, 0), light.position + glm::vec3(0, -0.5, 0) + light.direction, vec3(0, 1, 0));
     lightSpaceMatrix = lightProjection * lightView;
 
     // render depth map
@@ -648,8 +655,8 @@ void RenderScene(Scene& scene) {
     }
 
     // show depth map
-    //RenderTexture(depthMap[0]);
-    //return;
+    // RenderTexture(depthMap[0]);
+    // return;
 
     glad_glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
     glad_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -715,14 +722,18 @@ void RenderScene(Scene& scene) {
         scene.skybox->Draw(*skyboxShader);
     }
 
+    scene.flame->render(FrameTime::GetDeltaTime(), 
+        scene.flameTransfrom->GetModelMatrix(), 
+        scene.mainCamera->GetViewMatrix(), projection);
+
     glad_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     if (ssaoOn) {
         RenderSSAO();
     }
 
-    //RenderTexture(ambientBuffer);
-    //return;
+    // RenderTexture(ssaoBuffer);
+    // return;
 
     if (bloomOn) {
         RenderBloom();
@@ -752,6 +763,12 @@ void ProcessInput(Scene& scene) {
     }
 
     if (!blockInput) {
+        if (Input::GetKeyDown(GLFW_KEY_L)) {
+            mainShader->Use();
+            static bool flashLightOn = false;
+            flashLightOn = !flashLightOn;
+            mainShader->SetBool("flashLightOn", flashLightOn);
+        }
         if (Input::GetKeyDown(GLFW_KEY_N)) {
             mainShader->Use();
             normalOn = !normalOn;
@@ -798,6 +815,19 @@ void ProcessInput(Scene& scene) {
 			ss.save();
 			std::cout << "This scene has been saved!"<< std::endl;
 		}
+
+        if (Input::GetKey(GLFW_KEY_PAGE_UP)) {
+            hdrExposure = hdrExposure + 0.02;
+            if (hdrExposure > 3) hdrExposure = 3;
+            hdrShader->Use();
+            hdrShader->SetFloat("exposure", hdrExposure);
+        }
+        if (Input::GetKey(GLFW_KEY_PAGE_DOWN)) {
+            hdrExposure = hdrExposure - 0.02;
+            if (hdrExposure < 0.1) hdrExposure = 0.1;
+            hdrShader->Use();
+            hdrShader->SetFloat("exposure", hdrExposure);
+        }
     }
 
 }

@@ -15,16 +15,120 @@
             <nz path="cubemap/universe/1k_nz.jpg"/>
         </skyBox>
         <gameObject>
-            <list totalNum="18">
+            <list totalNum="32">
+                <aircraft num="1"/>
+                <camp num="1"/>
                 <container num="5"/>
                 <cottage num="1"/>
                 <cube num="1"/>
                 <earth num="3"/>
                 <ground num="1"/>
+                <horse num="1"/>
                 <lightCube num="1"/>
+                <mountain num="8"/>
                 <nanosuit num="5"/>
-                <tower num="1"/>
+                <statue num="1"/>
+                <sun num="1"/>
+                <tower num="2"/>
             </list>
+            <camp name="camp1">
+                <model path="camp/Campfire.obj"/>
+                <position x="7.25" y="0" z="-7.5999999"/>
+                <rotation x="0" y="-100.8" z="0"/>
+                <scale x="0.029999999" y="0.029999999" z="0.029999999"/>
+                <light isLight="false"/>
+            </camp>
+            <tower name="etower">
+                <model path="Eiffel_Tower/10067_Eiffel_Tower_v1_max2010_it1.obj"/>
+                <position x="11.45" y="-0.80000001" z="-26.200001"/>
+                <rotation x="-90" y="0" z="0"/>
+                <scale x="0.00060000003" y="0.00060000003" z="0.00060000003"/>
+                <light isLight="false"/>
+            </tower>
+            <statue name="statue1">
+                <model path="statue/12337_Statue_v1_l1.obj"/>
+                <position x="-0.80000001" y="0" z="-1.55"/>
+                <rotation x="-90" y="180" z="0"/>
+                <scale x="0.00050000002" y="0.00050000002" z="0.00050000002"/>
+                <light isLight="false"/>
+            </statue>
+            <horse name="horse1">
+                <model path="horse/horse.obj"/>
+                <position x="5.5500002" y="0" z="0"/>
+                <rotation x="-90" y="44" z="0"/>
+                <scale x="0.0080000004" y="0.0080000004" z="0.0080000004"/>
+                <light isLight="false"/>
+            </horse>
+            <sun name="sun1">
+                <model path="sun/Sun.obj"/>
+                <position x="20" y="20" z="20"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="4.9999999e-05" y="4.9999999e-05" z="4.9999999e-05"/>
+                <light isLight="true"/>
+            </sun>
+            <aircraft name="aircraft1">
+                <model path="aircraft/Aircraft_obj.obj"/>
+                <position x="0" y="16.15" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <light isLight="false"/>
+            </aircraft>
+            <mountain name="mountain1">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="17.700001" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain2">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="0" y="0" z="17.85"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain3">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="-17.65" y="0" z="0"/>
+                <rotation x="0" y="0" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain4">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="0" y="0" z="-17.875"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain5">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="-20" y="0" z="-17.875"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain6">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="20" y="0" z="-17.875"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain7">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="-20" y="0" z="17.875"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
+            <mountain name="mountain8">
+                <model path="mountain/mount.blend1.obj"/>
+                <position x="20" y="0" z="17.875"/>
+                <rotation x="0" y="90" z="0"/>
+                <scale x="2.4400001" y="2.4400001" z="2.4400001"/>
+                <light isLight="false"/>
+            </mountain>
             <nanosuit name="nanosuit1">
                 <model path="nanosuit/nanosuit.obj"/>
                 <position x="2.05" y="0" z="9.5"/>
@@ -82,21 +186,21 @@
             </nanosuit>
             <earth name="earth1">
                 <model path="earth/Earth 2K.obj"/>
-                <position x="-2.05" y="3.6500001" z="0.2"/>
-                <rotation x="90" y="0" z="0"/>
+                <position x="8.75" y="15" z="16.950001"/>
+                <rotation x="102.6" y="0" z="0"/>
                 <scale x="0.1" y="0.1" z="0.1"/>
                 <light isLight="false"/>
             </earth>
             <earth name="earth2">
                 <model path="earth/Earth 2K.obj"/>
-                <position x="7.1500001" y="4" z="1"/>
+                <position x="20" y="19.9" z="27.299999"/>
                 <rotation x="90" y="0" z="0"/>
                 <scale x="0.1" y="0.1" z="0.1"/>
                 <light isLight="false"/>
             </earth>
             <earth name="earth3">
                 <model path="earth/Earth 2K.obj"/>
-                <position x="0" y="4" z="2"/>
+                <position x="19.299999" y="14.15" z="36.049999"/>
                 <rotation x="90" y="0" z="0"/>
                 <scale x="0.1" y="0.1" z="0.1"/>
                 <light isLight="false"/>
@@ -122,7 +226,7 @@
                 <hitable/>
             </cube>
             <ground name="ground1">
-                <model path="stone/ground.obj"/>
+                <model path="cobble/cobble_ground.obj"/>
                 <position x="0" y="0.0099999998" z="0"/>
                 <rotation x="0" y="0" z="0"/>
                 <scale x="1" y="1" z="1"/>
@@ -132,9 +236,9 @@
             </ground>
             <lightCube name="lightCube1">
                 <model path="cube/light_cube.obj"/>
-                <position x="5" y="10.5" z="5"/>
+                <position x="0" y="15.8" z="-2.55"/>
                 <rotation x="0" y="0" z="0"/>
-                <scale x="1" y="1" z="1"/>
+                <scale x="0.16" y="0.16" z="0.16"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="2" y="2" z="2"/>
                 <light isLight="true"/>
@@ -142,9 +246,9 @@
             </lightCube>
             <container name="container1">
                 <model path="container/Container.obj"/>
-                <position x="-7.8000002" y="-0.050000001" z="-0.34999999"/>
+                <position x="-7.8000002" y="0" z="-0.34999999"/>
                 <rotation x="0.60000002" y="156.2" z="0.40000001"/>
-                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <scale x="0.0049999999" y="0.0049999999" z="0.0049999999"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="360" y="400" z="1000"/>
                 <light isLight="false"/>
@@ -152,9 +256,9 @@
             </container>
             <container name="container2">
                 <model path="container/Container.obj"/>
-                <position x="-1.25" y="-0.050000001" z="6.5999999"/>
+                <position x="-1.25" y="0" z="6.5999999"/>
                 <rotation x="0" y="40.799999" z="0"/>
-                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <scale x="0.0049999999" y="0.0049999999" z="0.0049999999"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="360" y="400" z="1000"/>
                 <light isLight="false"/>
@@ -162,9 +266,9 @@
             </container>
             <container name="container3">
                 <model path="container/Container.obj"/>
-                <position x="5.3499999" y="0.1" z="6.4000001"/>
+                <position x="5.3499999" y="0" z="6.4000001"/>
                 <rotation x="0" y="-66.599998" z="0"/>
-                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <scale x="0.0049999999" y="0.0049999999" z="0.0049999999"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="360" y="400" z="1000"/>
                 <light isLight="false"/>
@@ -172,9 +276,9 @@
             </container>
             <container name="container4">
                 <model path="container/Container.obj"/>
-                <position x="3.95" y="-0.2" z="-3.2"/>
+                <position x="3.95" y="0" z="-3.2"/>
                 <rotation x="0" y="21" z="0"/>
-                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <scale x="0.0049999999" y="0.0049999999" z="0.0049999999"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="360" y="400" z="1000"/>
                 <light isLight="false"/>
@@ -182,9 +286,9 @@
             </container>
             <container name="container5">
                 <model path="container/Container.obj"/>
-                <position x="-5.3000002" y="-0.1" z="8.3500004"/>
+                <position x="-5.3000002" y="0" z="8.3500004"/>
                 <rotation x="92.599998" y="86.400002" z="91.599998"/>
-                <scale x="0.0099999998" y="0.0099999998" z="0.0099999998"/>
+                <scale x="0.0049999999" y="0.0049999999" z="0.0049999999"/>
                 <hitbox_center x="0" y="0" z="0"/>
                 <hitbox_size x="360" y="400" z="1000"/>
                 <light isLight="false"/>
@@ -199,10 +303,10 @@
             </tower>
         </gameObject>
         <pointLight>
-            <position x="5" y="5" z="5"/>
-            <ambient x="0.2" y="0.2" z="0.2"/>
-            <diffuse x="0.80000001" y="0.80000001" z="0.80000001"/>
-            <specular x="1" y="1" z="1"/>
+            <position x="0" y="15.8" z="-2.55"/>
+            <ambient x="0" y="0" z="0"/>
+            <diffuse x="0" y="0" z="0"/>
+            <specular x="0.5" y="0.5" z="0.5"/>
             <constant value="1"/>
             <linear value="0.014"/>
             <quadratic value="0.0070000002"/>
@@ -210,8 +314,8 @@
         <dirLight>
             <position x="10" y="10" z="10"/>
             <direction x="-1" y="-1" z="-1"/>
-            <ambient x="0.1" y="0.1" z="0.1"/>
-            <diffuse x="0.80000001" y="0.69999999" z="0.60000002"/>
+            <ambient x="0.2" y="0.2" z="0.2"/>
+            <diffuse x="0.80000001" y="0.80000001" z="0.69999999"/>
             <specular x="1" y="1" z="1"/>
         </dirLight>
     </scene>

@@ -17,6 +17,7 @@
 #include "Gui.h"
 #include "sceneReader.h"
 #include "sceneSaver.h"
+#include "ParticleSystem.h"
 
 using namespace std;
 
@@ -40,11 +41,17 @@ int main() {
     Graphic::SetCursorMode(GLFW_CURSOR_DISABLED);
 
 
+    ParticleSystem flame(3000);
     Scene& scene = readFromXML("../resources/scenes/scene.xml");
+    scene.flame = &flame;
+    scene.flameTransfrom = new Transform();
+    scene.flameTransfrom->SetPosition(glm::vec3(7.2, -0.1, -7.25));
+    scene.flameTransfrom->SetScale(glm::vec3(1.0 / 20));
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     std::cout << "Start rendering." << std::endl;
+
     while (!Graphic::Closed()) {
         // new frame, clear
         Graphic::SwapFrame();

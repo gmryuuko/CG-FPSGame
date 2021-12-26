@@ -1,0 +1,19 @@
+# Blender v2.67 (sub 1) OBJ File: 'Crate1.blend'
+# www.blender.org
+mtllib Crate1.mtl
+o Cube_Cube.001
+v -10 0 -10
+v -10 0 10
+v 10 0 10
+v 10 0 -10
+vt -10 -10
+vt -10 10
+vt 10 10
+vt 10 -10
+vn 0 1 0
+vn 0 1 0
+vn 0 1 0
+vn 0 1 0
+usemtl Material.001
+s off
+f 1/1/1 2/2/2 3/3/3 4/4/4

@@ -64,3 +64,9 @@ Gamma校正不知道怎么调，干脆关了。
 ## GUI
 
 没Gui太难调试了，草
+
+## Graphic
+
+depthMap
+
+hdrBuffer[]
