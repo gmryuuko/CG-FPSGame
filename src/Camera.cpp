@@ -2,12 +2,14 @@
 #include "FrameTime.h"
 
 #include "glm/gtx/string_cast.hpp"
+#include "Resource.h"
 
 using namespace glm;
 
 Camera::Camera() {
     this->transform = new Transform();
     light = nullptr;
+    gun = nullptr;
     camMoved = false;
     primary = new MK14();
     secondary = new P1911();
@@ -25,7 +27,7 @@ mat4 Camera::GetViewMatrix() {
 void Camera::ProcessInput(glm::vec3 &position) {
     
     // keyboard
-    static float moveSpeed = 5.0f;
+    static float moveSpeed = 3.0f;
 
     // speed control
     if (Input::GetKeyDown(GLFW_KEY_UP)) {
@@ -71,9 +73,17 @@ void Camera::ProcessInput(glm::vec3 &position) {
     }
     if (Input::GetKey(GLFW_KEY_1)) {
         currentGun = primary;
+        gun->transform->SetPosition(vec3(0.2, -0.3, -0.7));
+        gun->transform->SetRotation(vec3(0, 180, 90));
+        gun->transform->SetScale(vec3(0.01));
+        gun->model = Resource::GetModel("M9/Beretta_M9.obj");
     }
     if (Input::GetKey(GLFW_KEY_2)) {
         currentGun = secondary;
+        gun->transform->SetPosition(vec3(0.15, -0.2, -0.7));
+        gun->transform->SetRotation(vec3(0, 180, 0));
+        gun->transform->SetScale(vec3(0.13));
+        gun->model = Resource::GetModel("M24/M24_R_High_Poly_Version_obj.obj");
     }
 
     // std::cout << glm::to_string(direction) << std::endl;
@@ -133,6 +143,11 @@ void Camera::ProcessInput(glm::vec3 &position) {
         light->position = transform->GetPosition();
         light->direction = -transform->GetAxisZ();
     }
+    if (gun != nullptr) {
+        // vec3 rotation = transform->GetRotation();
+        // gun->transform->SetPosition(transform->GetPosition() - transform->GetAxisZ());
+        // gun->transform->SetRotation(rotation);
+    }
 }
 
 void Camera::SetTransform(const Transform& transform) {
@@ -148,4 +163,9 @@ void Camera::SetPosition(const glm::vec3& position, const glm::vec3& dir) {
     if (light != nullptr) {
         light->position = position;
     }
+}
+
+void Camera::BindGun(GameObject* gun) {
+    this->gun = gun;
+    gun->transform->SetParent(transform);
 }

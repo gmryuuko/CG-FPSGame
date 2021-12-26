@@ -15,7 +15,7 @@
 class Transform;
 
 class GameObject {
-private:
+public:
 	Model* model;
 	
 

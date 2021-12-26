@@ -13,6 +13,7 @@
 class Camera {
 private:
     Light::SpotLight* light;
+    GameObject* gun;
 public:
     Transform* transform;
     float zoom = 45;
@@ -28,6 +29,7 @@ public:
     void ProcessInput(glm::vec3& translate);
     void SetTransform(const Transform& transform);
     void BindSpotLight(Light::SpotLight* light);
+    void BindGun(GameObject* gun);
     void SetPosition(const glm::vec3& translate, const glm::vec3& dir);
 };
 

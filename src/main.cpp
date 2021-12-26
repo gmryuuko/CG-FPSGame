@@ -48,6 +48,16 @@ int main() {
     scene.flameTransfrom->SetPosition(glm::vec3(7.2, -0.1, -7.25));
     scene.flameTransfrom->SetScale(glm::vec3(1.0 / 20));
 
+    // auto gun = new GameObject(Resource::GetModel("M24/M24_R_High_Poly_Version_obj.obj"));
+    auto gun = new GameObject(Resource::GetModel("M9/Beretta_M9.obj"));
+    Resource::GetModel("M24/M24_R_High_Poly_Version_obj.obj");
+    gun->transform->SetPosition(vec3(0.2, -0.3, -0.7));
+    gun->transform->SetRotation(vec3(0, 180, 90));
+    gun->transform->SetScale(vec3(0.01));
+    
+    scene.mainCamera->BindGun(gun);
+    scene.gameObjects.emplace_back(gun);
+
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     std::cout << "Start rendering." << std::endl;
