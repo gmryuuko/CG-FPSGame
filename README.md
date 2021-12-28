@@ -31,7 +31,15 @@ SSAO：
 
 游戏方面，实现了射击检测，碰撞检测，生命值系统，多种枪械切换，枪械后坐力，枪械伤害衰减，简单的敌人攻击等内容。
 
-另外使用开源库[Dear ImGui](https://github.com/ocornut/imgui)制作了场景编辑器，可以自由编辑场景里的游戏对象和光源。使用XML文件保存场景数据，使用到了开源库[TinyXML2](https://github.com/leethomason/tinyxml2)。
+![Game](img/2021-12-29-00-43-54.png)
+
+使用开源库[Dear ImGui](https://github.com/ocornut/imgui)制作了场景编辑器，可以自由编辑场景里的游戏对象和光源。
+
+![场景编辑](img/2021-12-29-00-42-10.png)
+
+使用XML文件保存和读取场景数据，使用到了开源库[TinyXML2](https://github.com/leethomason/tinyxml2)。
+
+![XML](img/2021-12-29-00-42-39.png)
 
 ## 项目要求
 
