@@ -3,12 +3,12 @@
 class Gun{
 public:
 	float recoil;
-	float recenteringTime; //单位为frametime
+	float recenteringTime; //鍗曚綅涓篺rametime
 	int damage;
 	float lastHitTime;
 	float constFactor;
 
-	// 衰减系数
+	// 琛板噺绯绘暟
 	float constant, linear, quadratic;
 
 	Gun() {

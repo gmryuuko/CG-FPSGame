@@ -43,6 +43,6 @@ public:
 
 - `GameObject`通过`Transform`形成树形结构。
 - `Transform`的`model`矩阵等不会在修改`position, rotation, scale`之后马上更新，所以应该使用`Get*()`函数来获取，而不是直接访问`modelMatrix`成员。同样地，对`position`等成员的修改也应使用`Set*()`函数而不是直接操作成员。
-- `Transform`的变换是相对于`local space`的。当存在父子关系时，先辈的`position`和`rotation`会依次作用到子节点上。  
+- `Transform`的变换是相对于`local space`的。当存在父子关系时，先辈的`position`和`rotation`会依次作用到子节点上（scale不会）。  
   例如：`a->b->c`(a是b的父节点，b是c的父节点)  
   Then `c.modelMatrix = (a.translateMat * a. rotationMat) * (b.translateMat * b. rotationMat) * (c.translateMat * c. rotationMat * c.scaleMat)`

@@ -1,29 +1,36 @@
 ﻿# Document
 
+（不完全文档）
+
 ## Engine
 
-目前实现了`FrameTime, Input, Graphic`，只需要调用`Graphic::CreateWindow`，`Time`和`Input`会自动初始化。
+### ObjLoader
 
-一个Render loop应当是这样：
+使用`ObjLoader::LoadModel`加载模型，传入参数为模型的路径。在读取`.obj`文件的同时，还会检测是否存在`.mtl`文件描述材质，如果有的话一起读取并且应用材质，如果没有就使用默认材质。
+
+使用`ObjLoader::WriteModel`导出材质，默认导出到相对路径`../export.obj`。
 
 ```cpp
-while (!Graphic::Closed()) {
-    Graphic::SwapFrame();
-    Graphic::Clear();
-    // render
+namespace ObjLoader {
+    Model* LoadModel(const std::string& path);
+    bool WriteModel(const Model& model);
 }
 ```
 
 ### FrameTime
 
+帧时间相关函数封装
+
 ```cpp
 namespace FrameTime {
-float GetTime();
-float GetDeltaTime();
+    float GetTime();
+    float GetDeltaTime();
 }
 ```
 
 ### Input
+
+键盘、鼠标输入相关函数封装
 
 ```cpp
 namespace Input {
@@ -44,8 +51,6 @@ void GetCursor(double& xpos, double& ypos);
 
 但是`glfwGetKey()`这个函数只返回是否按下，对于按下触发和松开触发需要注册回调函数。
 
-`keyCode`最大值应该是`348`（翻glfw头文件找的），最小值是`-1(UNKNOWN)`
-
 `Input::GetKey(keyCode)`返回当前帧里`keyCode`有没有被按下。
 
 `Input::GetKeyDown(keyCode)`只在按下按键的第一帧返回`true`
@@ -58,8 +63,6 @@ void GetCursor(double& xpos, double& ypos);
 
 鼠标移动事件不使用回调函数实现，鼠标快速移动的时候一帧里会调用很多次callback，实测对性能影响似乎还不小，掉了好多帧。
 
-鼠标按键暂时还没写，可以集成到`GetKey()`函数里面吧
-
 ### Resource
 
 管理所有资源，避免重复创建。
@@ -68,34 +71,23 @@ void GetCursor(double& xpos, double& ypos);
 
 ```cpp
 namespace Resource {
-unordered_map<string, Texture*> textures;
-unordered_map<string, Model*> models;
-// unordered_map<string, Audio*> audio;
-    
-GetTexture(const string& path); // 图片文件路径
-GetModel(const string& Model); // obj 文件路径
+    unordered_map<string, Texture*> textures;
+    unordered_map<string, Model*> models;
+        
+    GetTexture(const string& path); // 图片文件路径
+    GetModel(const string& Model); // obj 文件路径
 }
 
 ```
 
 ### Graphic
 
-```cpp
-class Shader;
+将`Scene`类的一个对象交给`Graphic::RenderScene()`，即可完成一帧内的渲染。
 
+```cpp
 namespace Graphic {
-// 实现在一个render loop里的一次绘制
-void Render(const Scene& scene);
-}
-```
-
-### Gui
-
-用dear imgui?
-
-```cpp
-namespace Gui {
-    
+    // 实现在一个render loop里的一次绘制
+    void RenderScene(const Scene& scene);
 }
 ```
 
@@ -111,9 +103,9 @@ namespace Gui {
 
 当调用`GetModelMatrix()`时，如果`dirty=true`才会计算。
 
-**现在GameObject下面直接放了一个Mesh，应该还是要改成Model**
-
 ### Transform
+
+支持Translate、Rotate和Scale三种变换。
 
 ```cpp
 class Transform 
@@ -133,6 +125,8 @@ public:
 
 ### Camera
 
+摄像机类。
+
 ```cpp
 class Camera
 {
@@ -143,6 +137,8 @@ public:
 ```
 
 ### Model
+
+一个模型（Model）下可以有多个网格（Mesh），绘制一个模型只需要调用`Model::Draw(shader)`函数即可。其中参数`shader`传入绘制此模型使用的着色器。
 
 ```cpp
 struct Vertex {
@@ -179,21 +175,16 @@ private:
 ### Light
 
 ```cpp
-enum class LightType
-{
-    // 点光  方向光     聚光
-    Point, Direction, Spot
-};
-
-class Light
-{
-public:
-    Transform transform;
-    
+namespace Light {
+    struct PointLight;
+    struct DirLight;
+    struct SpotLight;
 }
 ```
 
 ### GameObject
+
+游戏对象，主要由一个`Model`和一个`Transfrom`构成。
 
 ```cpp
 class GameObject
@@ -205,13 +196,13 @@ class GameObject
 
 ### Scene
 
-用xml保存场景？[leethomason/tinyxml2](https://github.com/leethomason/tinyxml2)
+保存一个游戏场景，场景内主要有一个主摄像机，若干个游戏对象和若干个光源。
 
 ```cpp
 class Scene
 {
 public:
-    vector<Model*> models;
+    vector<GameObject*> gameObjects;
     vector<Camera*> cameras;
     vector<Light*> lights;
     Camera* mainCamera;

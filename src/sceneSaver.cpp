@@ -82,7 +82,7 @@ void sceneSaver::saveGameObject(GameObject* obj) {
 		object->InsertEndChild(hitbox_center);
 		object->InsertEndChild(hitbox_size);
 
-		// 构建一组新的hitbox条目，因为可能有多个hitbox
+		// 鏋勫缓涓�缁勬柊鐨刪itbox鏉＄洰锛屽洜涓哄彲鑳芥湁澶氫釜hitbox
 		hitbox_center = doc.NewElement("hitbox_center");
 		hitbox_size = doc.NewElement("hitbox_size");
 	}
