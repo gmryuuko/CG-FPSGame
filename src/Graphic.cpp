@@ -369,6 +369,7 @@ void InitBloom() {
     }
 }
 
+// 加速插值函数
 float lerp(float a, float b, float f) { return a + f * (b - a); }
 
 void InitSSAO() {
@@ -388,28 +389,27 @@ void InitSSAO() {
         std::cout << "Framebuffer not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // generate sample kernel
-    std::uniform_real_distribution<float> randomFloats(0, 1);
+    // 生成采样核
+    std::uniform_real_distribution<float> randReal(0, 1);
     std::default_random_engine generator;
     std::vector<glm::vec3> ssaoKernel;
-    for (int i = 0; i < 64; i++) {
-        glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+    for (int i = 0; i < 32; i++) {
+        glm::vec3 sample(randReal(generator) * 2 - 1, randReal(generator) * 2 - 1, randReal(generator));
         sample = glm::normalize(sample);
-        sample *= randomFloats(generator);
-        float scale = float(i) / 64.0;
-
-        // scale samples s.t. they're more aligned to center of kernel
-        scale = lerp(0.1f, 1.0f, scale * scale);
+        sample *= randReal(generator);
+        float scale = float(i) / 64.0f;
+        // 缩放采样核，使其更接近中心。
+        scale = lerp(0.1, 1, scale * scale);
         sample *= scale;
         ssaoKernel.push_back(sample);
     }
-    // generate noise texture
+    // 生成4x4噪声图像
     std::vector<glm::vec3> ssaoNoise;
-    for (unsigned int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; i++)
     {
-        glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f); // rotate around z-axis (in tangent space)
+        glm::vec3 noise(randReal(generator) * 2 - 1, randReal(generator) * 2 - 1, 0); // rotate around z-axis (in tangent space)
         ssaoNoise.push_back(noise);
-        std::cout << noise.x << ' ' << noise.y << ' ' << noise.z << std::endl;
+        // std::cout << noise.x << ' ' << noise.y << ' ' << noise.z << std::endl;
     }
     glGenTextures(1, &noiseTexture);
     glBindTexture(GL_TEXTURE_2D, noiseTexture);
@@ -424,6 +424,9 @@ void InitSSAO() {
     for (int i = 0; i < 64; i++) {
         ssaoShader->SetVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
     }
+    ssaoShader->SetInt("kernelSize", ssaoKernel.size());
+    ssaoShader->SetFloat("radius", 0.5);
+    ssaoShader->SetFloat("bias", 0.025);
 
     // ssao blur
     glGenFramebuffers(1, &ssaoBlurFBO);
